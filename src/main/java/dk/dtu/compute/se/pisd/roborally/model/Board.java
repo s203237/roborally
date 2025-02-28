@@ -57,6 +57,8 @@ public class Board extends Subject {
 
     private int step = 0;
 
+    private int counter = 0;
+
     private boolean stepMode;
 
     public Board(int width, int height, @NotNull String boardName) {
@@ -210,9 +212,12 @@ public class Board extends Subject {
         // the students, this method gives a string representation of the current
         // status of the game
 
-        // TODO V1: add the move count to the status message
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
-        return "Player = " + getCurrentPlayer().getName();
+        /**
+         * "Counter represents the total amount of steps"
+         * *TODO Incrment counter on each player step*
+         */
+        return "Player = " + getCurrentPlayer().getName() + ", Total steps = " + counter;
     }
 
 }
