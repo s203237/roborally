@@ -98,4 +98,17 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+    /**
+     * Draw the wall icons
+     */
+private void drawWalls(){
+
+}
+
+/**
+ * Draws the action fields on the space (conveyor, gear and checkpoints)
+ */
+private void drawActionField(){
+
+}
 }

@@ -47,7 +47,7 @@ public class AppController implements Observer {
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
-
+//final private List<String> BOARD_NAME_OPTIONS
     final private RoboRally roboRally;
 
     private GameController gameController;
@@ -57,12 +57,12 @@ public class AppController implements Observer {
     }
 
     public void newGame() {
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-        dialog.setTitle("Player number");
-        dialog.setHeaderText("Select number of players");
-        Optional<Integer> result = dialog.showAndWait();
 
-        if (result.isPresent()) {
+        ChoiceDialog<Integer> dialog1 = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        dialog1.setTitle("Board name");
+        dialog1.setHeaderText("Select a board");
+        Optional<Integer> result1 = dialog1.showAndWait();
+        if (result1.isPresent()) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
                 // give the user the option to save the game or abort this operation!
@@ -70,12 +70,21 @@ public class AppController implements Observer {
                     return;
                 }
             }
+        ChoiceDialog<Integer> dialog2 = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        dialog2.setTitle("Player number");
+        dialog2.setHeaderText("Select number of players");
+        Optional<Integer> result2 = dialog2.showAndWait();
+            if (result2.isPresent()) {
+
+                    }
+
+
 
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
             gameController = new GameController(board);
-            int no = result.get();
+            int no = result1.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);

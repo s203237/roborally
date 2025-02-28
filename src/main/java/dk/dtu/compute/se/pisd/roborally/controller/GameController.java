@@ -55,10 +55,11 @@ public class GameController {
         //     message needs to be implemented at another place)
 
         Player current = board.getCurrentPlayer();// create a player
-        if(space!= null && space.getPlayer()!=null){
-            space.setPlayer(current);//
+        if(space!= null && space.getPlayer()==null){
+            current.setSpace(space);
             int n = board.getPlayerNumber(current);
-            Player next = board.getPlayer(n+1);
+            Player next = board.getPlayer((n+1)%board.getPlayersNumber());
+            board.setCurrentPlayer(next);
         }
 
     }
