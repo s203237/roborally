@@ -174,6 +174,23 @@ public class Board extends Subject {
     }
 
     /**
+     * Function for setting the steps counter for each move the player takes.
+     * @param value the new value of the counter
+     */
+    public void setCounterSteps(@NotNull int value){
+            counter=value;
+    }
+
+    /**
+     *
+     * @return the total player moves
+     */
+
+    public int getCounterSteps(){
+        return counter;
+    }
+
+    /**
      * Returns the neighbour of the given space of the board in the given heading.
      * The neighbour is returned only, if it can be reached from the given space
      * (no walls or obstacles in either of the involved spaces); otherwise,
@@ -215,9 +232,8 @@ public class Board extends Subject {
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
         /**
          * "Counter represents the total amount of steps", which is a new integer for the board class.
-         * *TODO Incrment counter on each player step*
          */
-        return "Player = " + getCurrentPlayer().getName() + ", Total steps = " + counter;
+        return "Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
     }
 
 }

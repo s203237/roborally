@@ -60,6 +60,8 @@ public class GameController {
             int n = board.getPlayerNumber(current);
             Player next = board.getPlayer((n+1)%board.getPlayersNumber());
             board.setCurrentPlayer(next);
+            //Increment steps
+            board.setCounterSteps(board.getCounterSteps()+1);
         }
 
     }
