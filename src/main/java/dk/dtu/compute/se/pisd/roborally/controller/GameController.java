@@ -54,6 +54,13 @@ public class GameController {
         //     if and when the player is moved (the counter and the status line
         //     message needs to be implemented at another place)
 
+        Player current = board.getCurrentPlayer();// create a player
+        if(space!= null && space.getPlayer()!=null){
+            space.setPlayer(current);//
+            int n = board.getPlayerNumber(current);
+            Player next = board.getPlayer(n+1);
+        }
+
     }
 
     // XXX V2
