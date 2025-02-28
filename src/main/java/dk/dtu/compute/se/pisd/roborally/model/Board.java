@@ -214,7 +214,7 @@ public class Board extends Subject {
 
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
         /**
-         * "Counter represents the total amount of steps"
+         * "Counter represents the total amount of steps", which is a new integer for the board class.
          * *TODO Incrment counter on each player step*
          */
         return "Player = " + getCurrentPlayer().getName() + ", Total steps = " + counter;
