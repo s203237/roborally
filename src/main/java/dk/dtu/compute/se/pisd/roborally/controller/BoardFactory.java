@@ -83,9 +83,9 @@ public class BoardFactory {
         space.getActions().add(action);
 
         space = board.getSpace(2,2);
-        Checkpoint checkpoint1 = board.addCheckpoint(space, 1);
+        space.addCheckpoint(space, 1);
         space = board.getSpace(4,5);
-        Checkpoint checkpoint2 = board.addCheckpoint(space, 2);
+        space.addCheckpoint(space, 2);
 
         return board;
     }
