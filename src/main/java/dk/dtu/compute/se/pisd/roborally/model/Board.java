@@ -51,6 +51,8 @@ public class Board extends Subject {
 
     private final List<Player> players = new ArrayList<>();
 
+    private final List<Checkpoint> checkpoints = new ArrayList<>(); //Keep track of all checkpoints in the given board.
+
     private Player current;
 
     private Phase phase = INITIALISATION;
@@ -173,6 +175,29 @@ public class Board extends Subject {
         return -1;
         //}
     }
+
+    /**
+     * Adds the given checkpoint to the board and the board's checkpoint list
+     * @param space
+     * @param checkpointNo
+     * @return the new checkpoint
+     */
+    public Checkpoint addCheckpoint(@NotNull Space space, int checkpointNo){
+        Checkpoint newCheckpoint = new Checkpoint(space, checkpointNo);
+        checkpoints.add(newCheckpoint); //add to list
+        return newCheckpoint;
+    }
+
+    /**
+     * Returns the given checkpoints space object
+     * @param checkpoint
+     * @return a space
+     */
+    public Space getCheckpointSpace(@NotNull Checkpoint checkpoint){
+        return checkpoint.getCheckPointSpace();
+    }
+
+
 
     /**
      * Function for setting the steps counter for each move the player takes.
