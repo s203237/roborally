@@ -48,12 +48,19 @@ public class Space extends Subject {
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();
+    //Checkpoint
+    private int checkpointNumber = -1; // -1 nghia la khong phai checkpoint
+    // Conveyor
+    private Heading conveyorHeading = null; // huong cua bang chuyen  ( neu co)
+    //Laser
+    private boolean hasLaser = false; // kiem tra o co Laser hay khong
+
 
     public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
         this.y = y;
-        player = null;
+        this.player = null;
     }
 
     public Player getPlayer() {
@@ -88,6 +95,59 @@ public class Space extends Subject {
     public List<Heading> getWalls() {
         return walls;
     }
+//    public boolean setWalls(Heading walls) {
+//        this.walls = new ArrayList<>(newWalls);
+//        notifyChange();
+//
+//        //Tilføje en væg til array walls
+//    }
+    // them 1 buc tuong vao danh sach neu chua ton tai
+    public void addWall (Heading wall) {
+        if (!walls.contains(wall)) {
+            walls.add(wall);
+            notifyChange();
+        }
+    }
+    // Xoa 1 buc tuong khoi danh sach
+    public void removeWall(Heading wall) {
+        if (walls.contains(wall)) {
+            walls.remove(wall);
+                notifyChange(); // cap nhat thay doi
+            }
+        }
+        //kiem tra xem o nay co tuong o huong cu the khong
+    public boolean hasWall (Heading direction) {
+        return walls.contains(direction);
+    }
+    public boolean isCheckpoint() {
+
+        return checkpointNumber > 0;
+    }
+    public int getCheckpointNumber() {
+        return checkpointNumber;
+    }
+    public void setCheckpointNumber(int number) {
+        this.checkpointNumber = number;
+        notifyChange();
+    }
+    public boolean hasConveyor() {
+       return conveyorHeading != null;
+    }
+    public Heading getConveyorHeading() {
+        return conveyorHeading;
+       // notifyChange();
+    }
+    // quan ly Laser
+    public boolean hasLaser() {
+        return hasLaser;
+    }
+
+    public void setLaser(boolean laser) {
+        this.hasLaser = laser;
+        notifyChange();
+    }
+
+
 
     /**
      * Returns the list of field actions on this space.

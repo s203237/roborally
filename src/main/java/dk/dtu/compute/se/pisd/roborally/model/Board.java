@@ -68,10 +68,10 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
-                spaces[x][y] = space;
+                spaces[x][y] = new Space(this, x, y);
             }
         }
+        // setupWalls();  get refer to later
         this.stepMode = false;
     }
 
@@ -99,6 +99,7 @@ public class Board extends Subject {
             return spaces[x][y];
         } else {
             return null;
+            //return spaces[x][y];
         }
     }
 
@@ -168,9 +169,9 @@ public class Board extends Subject {
     public int getPlayerNumber(@NotNull Player player) {
         if (player.board == this) {
             return players.indexOf(player);
-        } else {
-            return -1;
-        }
+        } //else {
+        return -1;
+        //}
     }
 
     /**
@@ -223,7 +224,25 @@ public class Board extends Subject {
 
         return getSpace(x, y);
     }
+    /*
+    den her method kun til test  a wall.
 
+    private void setupWalls() {
+        if (getSpace(0,0) !=null) {
+            getSpace(0,0).addWall(Heading.NORTH);
+            getSpace(0,0).addWall(Heading.WEST);
+        }
+
+        if (getSpace(2,3) != null) {
+            getSpace(2,3).addWall(Heading.SOUTH);
+        }
+
+        if (getSpace(4,5) !=null) {
+            getSpace(4,5).addWall(Heading.EAST);
+        }
+        notifyChange();
+    }
+*/
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
