@@ -22,12 +22,22 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.Gear;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * ...
@@ -94,21 +104,32 @@ public class SpaceView extends StackPane implements ViewObserver {
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
 
+            updateGears();
             updatePlayer();
+
         }
     }
 
+
+
     /**
-     * Draw the wall icons
+     * This method is used to determine how the gear are created in the space
      */
-private void drawWalls(){
+    public void updateGears() {
+        for (FieldAction action: space.getActions()){
+            if(action instanceof Gear){
+                Gear gear = (Gear) action;
+                ImageView imageView = new ImageView();
+                Image image = new Image("Images/gear.png",50,50,false,false);
+                imageView.setImage(image);
+                this.getChildren().add(imageView);
 
-}
+                if (gear != null) {
+                    Text i = new Text(gear.isRight() ? "right" : "left");
+                    this.getChildren().add(i);
+                }
+            }
+        }
 
-/**
- * Draws the action fields on the space (conveyor, gear and checkpoints)
- */
-private void drawActionField(){
-
-}
+    }
 }

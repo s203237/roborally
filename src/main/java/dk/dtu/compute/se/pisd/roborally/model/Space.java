@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.Gear;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +49,16 @@ public class Space extends Subject {
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();
+    private Gear gear;
+
 
     public Space(Board board, int x, int y) {
         this.board = board;
         this.x = x;
         this.y = y;
         player = null;
+        gear =null;
+
     }
 
     public Player getPlayer() {
@@ -89,6 +94,10 @@ public class Space extends Subject {
         return walls;
     }
 
+    public Gear getGear(){
+        return gear;
+    }
+
     /**
      * Returns the list of field actions on this space.
      * Note that clients may change this list; this should, however,
@@ -109,4 +118,21 @@ public class Space extends Subject {
         notifyChange();
     }
 
+    /**
+     * Adds a gear to this space if it does not already have one.
+     * gear will rotate the player's direction when they land on this space
+     * @param direction of gear ( left or right)
+     */
+    public void addGear(Gear.GearType direction){
+        if(this.gear == null){
+            this.gear = new Gear(direction);
+            this.actions.add(this.gear);
+            notifyChange();
+        }
+    }
+    public void addWall(Heading heading) {
+        if (!walls.contains(heading)) {
+            this.walls.add(heading);
+        }
+    }
 }
