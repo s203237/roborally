@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
@@ -80,6 +81,11 @@ public class BoardFactory {
         action  = new ConveyorBelt();
         action.setHeading(Heading.WEST);
         space.getActions().add(action);
+
+        space = board.getSpace(2,2);
+        Checkpoint checkpoint1 = board.addCheckpoint(space, 1);
+        space = board.getSpace(4,5);
+        Checkpoint checkpoint2 = board.addCheckpoint(space, 2);
 
         return board;
     }
