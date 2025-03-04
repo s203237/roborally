@@ -67,7 +67,7 @@ public class GameController {
     }
 
     // XXX V2
-    public void startProgrammingPhase() {
+    public voidstartProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
@@ -200,6 +200,12 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case BACK_UP:
+                    this.moveBackward(player);
+                    break;
+                case U_TURN:
+                    this.makeUTurn(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -223,6 +229,12 @@ public class GameController {
 
     // TODO V2
     public void turnLeft(@NotNull Player player) {
+
+    }
+    public void moveBackward(@NotNull Player player){
+
+    }
+    public void makeUTurn(@NotNull Player player){
 
     }
 
