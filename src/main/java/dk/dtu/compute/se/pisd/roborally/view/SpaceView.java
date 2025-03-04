@@ -22,6 +22,9 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.layout.StackPane;
@@ -65,7 +68,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 
         // This space view should listen to changes of the space
         space.attach(this);
-        update(space);
+        updateView(space);
     }
 
     private void updatePlayer() {
@@ -93,7 +96,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             // XXX A3: drawing walls and action on the space (could be done
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
-
+            drawActionField();
             updatePlayer();
         }
     }
@@ -101,14 +104,45 @@ public class SpaceView extends StackPane implements ViewObserver {
     /**
      * Draw the wall icons
      */
-private void drawWalls(){
+    private void drawWalls(){
 
-}
+    }
 
-/**
- * Draws the action fields on the space (conveyor, gear and checkpoints)
- */
-private void drawActionField(){
+    /**
+     * Draws the action fields on the space (conveyor, gear and checkpoints)
+     */
+    private void drawActionField(){
+        for (FieldAction action : space.getActions()){
+            if (action instanceof ConveyorBelt conveyor) {
+                drawConveyorBelt(conveyor.getHeading());
+            }
 
-}
+        }
+
+    }
+    private void drawConveyorBelt(Heading heading) {
+        Polygon conArrow = new Polygon(
+                15.0, 0.0,
+                0.0, 30.0,
+                30.0, 30.0
+        );
+        conArrow.setFill(Color.LIGHTGRAY);
+
+        switch (heading) {
+            case NORTH:
+                conArrow.setRotate(0);
+                break;
+            case EAST:
+                conArrow.setRotate(90);
+                break;
+            case SOUTH:
+                conArrow.setRotate(180);
+                break;
+            case WEST:
+                conArrow.setRotate(270);
+                break;
+
+        }
+        this.getChildren().add(conArrow);
+    }
 }
