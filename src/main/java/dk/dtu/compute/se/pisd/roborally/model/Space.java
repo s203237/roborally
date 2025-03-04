@@ -131,7 +131,8 @@ public class Space extends Subject {
      * @param direction of gear ( left or right)
      */
     public void addGear(Gear.GearType direction){
-        this.actions.add(new Gear(direction));
+        Gear newGear = new Gear(direction);
+        this.actions.add(newGear);
         notifyChange();
     }
     public void addWall(Heading heading) {
