@@ -43,7 +43,6 @@ import java.util.List;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
@@ -83,14 +82,14 @@ public class SpaceView extends StackPane implements ViewObserver {
         if (player != null) {
             Polygon arrow = new Polygon(0.0, 0.0,
                     10.0, 20.0,
-                    20.0, 0.0 );
+                    20.0, 0.0);
             try {
                 arrow.setFill(Color.valueOf(player.getColor()));
             } catch (Exception e) {
                 arrow.setFill(Color.MEDIUMPURPLE);
             }
 
-            arrow.setRotate((90*player.getHeading().ordinal())%360);
+            arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
             this.getChildren().add(arrow);
         }
     }
@@ -104,6 +103,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
 
+            drawWalls();
             updateGears();
             updatePlayer();
 
@@ -114,64 +114,63 @@ public class SpaceView extends StackPane implements ViewObserver {
      * Draw the wall icons
      */
 
-private void drawWalls(){
-    for (Heading wall : space.getWalls()) {
-        Line wallLine = new Line();
+    private void drawWalls() {
+        for (Heading wall : space.getWalls()) {
+            Line wallLine = new Line();
+            double startX = 0, startY = 0, endX = 0, endY = 0;
 
-        double startX = 0, startY = 0, endX = 0, endY = 0;
-
-        switch (wall) {
-            case NORTH:
-                startX = 0;
-                startY = 0;
-                endX = SPACE_WIDTH;
-                endY = 0;
-              //  if (wall == Heading.NORTH) {
+            switch (wall) {
+                case NORTH:
+                    startX = 0;
+                    startY = 0;
+                    endX = SPACE_WIDTH;
+                    endY = 0;
+                    //  if (wall == Heading.NORTH) {
                     wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case EAST:
-                startX = SPACE_WIDTH;
-                startY = 0;
-                endX = SPACE_WIDTH;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                //wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case SOUTH:
-                startX = 0;
-                startY = SPACE_HEIGHT;
-                endX = SPACE_WIDTH;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case WEST:
-                startX = 0;
-                startY = 0;
-                endX = 0;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                break;
-        }
-        wallLine.setStartX(startX);
-        wallLine.setStartY(startY);
-        wallLine.setEndX(endX);
-        wallLine.setEndY(endY);
-        wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
-        wallLine.setStrokeWidth(4); // Do day cua tuong
+                    break;
+                case EAST:
+                    startX = SPACE_WIDTH;
+                    startY = 0;
+                    endX = SPACE_WIDTH;
+                    endY = SPACE_HEIGHT;
+                    wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+                    //wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+                    break;
+                case SOUTH:
+                    startX = 0;
+                    startY = SPACE_HEIGHT;
+                    endX = SPACE_WIDTH;
+                    endY = SPACE_HEIGHT;
+                    wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+                    break;
+                case WEST:
+                    startX = 0;
+                    startY = 0;
+                    endX = 0;
+                    endY = SPACE_HEIGHT;
+                    wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+                    break;
+            }
+            wallLine.setStartX(startX);
+            wallLine.setStartY(startY);
+            wallLine.setEndX(endX);
+            wallLine.setEndY(endY);
+            wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
+            wallLine.setStrokeWidth(4); // Do day cua tuong
 
-        this.getChildren().add(wallLine);
+            this.getChildren().add(wallLine);
+        }
     }
-}
 
     /**
      * This method is used to determine how the gear are created in the space
      */
     public void updateGears() {
-        for (FieldAction action: space.getActions()){
-            if(action instanceof Gear){
+        for (FieldAction action : space.getActions()) {
+            if (action instanceof Gear) {
                 Gear gear = (Gear) action;
                 ImageView imageView = new ImageView();
-                Image image = new Image("Images/gear.png",50,50,false,false);
+                Image image = new Image("Images/gear.png", 50, 50, false, false);
                 imageView.setImage(image);
                 this.getChildren().add(imageView);
 
