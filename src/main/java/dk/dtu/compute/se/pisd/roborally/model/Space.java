@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
 
 import java.util.ArrayList;
@@ -82,7 +83,19 @@ public class Space extends Subject {
     }
 
     /**
-     * Returns the walls (actually their direction) on this space.
+     * Adds the given checkpoint to the board and the board's checkpoint list
+     * @param space
+     * @param checkpointNo
+     * @return the new checkpoint
+     */
+    public Checkpoint addCheckpoint(@NotNull Space space, int checkpointNo){
+        Checkpoint newCheckpoint = new Checkpoint(space, checkpointNo);
+        actions.add(newCheckpoint); // add to actions field list.
+        return newCheckpoint;
+    }
+
+    /**
+     * Returns the walls3 (actually their direction) on this space.
      * Note that clients may change this list; this should, however,
      * be done only during the setup of the game (not while the game
      * is running).

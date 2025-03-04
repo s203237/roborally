@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
@@ -48,12 +50,17 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    //Keeps track of the current checkpoint, the player last visited.
+    private int CheckpointProgress;
+
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
         this.name = name;
         this.color = color;
 
         this.space = null;
+
+        this.CheckpointProgress=0;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -123,6 +130,25 @@ public class Player extends Subject {
                 space.playerChanged();
             }
         }
+    }
+
+    /**
+     * To get the players last visited checkpoint
+     * @return the checkpointProgress, representing the last visited checkpoint
+     */
+    public int getCheckpointProgress(){
+        return this.CheckpointProgress;
+    }
+
+    /**
+     * To update the players checkpoint progress
+     * @param value the new checkpoint progress
+     */
+    public void setCheckpointProgress(int value){
+        this.CheckpointProgress = value;
+
+        //For debugging purposes
+        System.out.println(this.name +"'s updated checkpoint prog: " + this.getCheckpointProgress());
     }
 
     public CommandCardField getProgramField(int i) {
