@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
@@ -81,12 +82,12 @@ public class Space extends Subject {
 
     /**
      * Adds the given checkpoint to the board and the board's checkpoint list
-     * @param space
-     * @param checkpointNo
+     * @param checkpointNo checkpoint number
+     * @param lastCheck boolean whether it's the last checkpoint or not
      * @return the new checkpoint
      */
-    public Checkpoint addCheckpoint(@NotNull Space space, int checkpointNo){
-        Checkpoint newCheckpoint = new Checkpoint(space, checkpointNo);
+    public Checkpoint addCheckpoint(int checkpointNo, boolean lastCheck){
+        Checkpoint newCheckpoint = new Checkpoint(checkpointNo, lastCheck);
         actions.add(newCheckpoint); // add to actions field list.
         return newCheckpoint;
     }
@@ -131,11 +132,11 @@ public class Space extends Subject {
      * @param direction of gear ( left or right)
      */
     public void addGear(Gear.GearType direction){
-            Gear newGear = new Gear(direction);
-            this.actions.add(newGear);
-            notifyChange();
-        }
+        Gear newGear = new Gear(direction);
+        this.actions.add(newGear);
+        notifyChange();
     }
+
     public void addWall(Heading heading) {
         if (!walls.contains(heading)) {
             this.walls.add(heading);
