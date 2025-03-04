@@ -50,7 +50,6 @@ public class Space extends Subject {
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();
-    private Gear gear;
 
 
     public Space(Board board, int x, int y) {
@@ -58,8 +57,6 @@ public class Space extends Subject {
         this.x = x;
         this.y = y;
         player = null;
-        gear =null;
-
     }
 
     public Player getPlayer() {
@@ -107,9 +104,6 @@ public class Space extends Subject {
         return walls;
     }
 
-    public Gear getGear(){
-        return gear;
-    }
 
     /**
      * Returns the list of field actions on this space.
@@ -137,9 +131,8 @@ public class Space extends Subject {
      * @param direction of gear ( left or right)
      */
     public void addGear(Gear.GearType direction){
-        if(this.gear == null){
-            this.gear = new Gear(direction);
-            this.actions.add(this.gear);
+            Gear newGear = new Gear(direction);
+            this.actions.add(newGear);
             notifyChange();
         }
     }
