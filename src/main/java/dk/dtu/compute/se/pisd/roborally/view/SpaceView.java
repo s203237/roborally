@@ -110,7 +110,71 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+    /**
+     * Draw the wall icons
+     */
 
+private void drawWalls(){
+
+    for (Heading wall : space.getWalls()) {
+        Line wallLine = new Line();
+
+        double startX = 0, startY = 0, endX = 0, endY = 0;
+
+        switch (wall) {
+            case NORTH:
+                startX = 0;
+                startY = 0;
+                endX = SPACE_WIDTH;
+                endY = 0;
+              //  if (wall == Heading.NORTH) {
+                    wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+                break;
+            case EAST:
+                startX = SPACE_WIDTH;
+                startY = 0;
+                endX = SPACE_WIDTH;
+                endY = SPACE_HEIGHT;
+                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+                //wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+                break;
+            case SOUTH:
+                startX = 0;
+                startY = SPACE_HEIGHT;
+                endX = SPACE_WIDTH;
+                endY = SPACE_HEIGHT;
+                wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+                break;
+            case WEST:
+                startX = 0;
+                startY = 0;
+                endX = 0;
+                endY = SPACE_HEIGHT;
+                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+                break;
+        }
+        wallLine.setStartX(startX);
+        wallLine.setStartY(startY);
+        wallLine.setEndX(endX);
+        wallLine.setEndY(endY);
+        wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
+        wallLine.setStrokeWidth(4); // Do day cua tuong
+
+//        if (wall == Heading.NORTH) {
+//            wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+//        } else if (wall == Heading.SOUTH) {
+//            wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
+//        } else if (wall == Heading.WEST) {
+//            wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+//        } else if (wall == Heading.EAST) {
+//            wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+//        }
+
+//        wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
+//        wallLine.setTranslateX(-SPACE_HEIGHT/ 2.0);
+        this.getChildren().add(wallLine);
+    }
+}
 
     /**
      * This method is used to determine how the gear are created in the space
