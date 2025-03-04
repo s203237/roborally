@@ -7,16 +7,16 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
 public class Checkpoint extends FieldAction {
-    final private Space checkpointSpace; //The space on which the checkpoint exists
-    final private int checkpointNumber; //The checkpoint-number
+    final private int checkpointNumber;
+    private boolean lastCheckpoint;//The checkpoint-number
 
-    public Checkpoint(Space checkpointSpace, int checkpointNumber){
-        this.checkpointSpace = checkpointSpace;
+    public Checkpoint(int checkpointNumber, boolean lastCheckpoint){
         this.checkpointNumber = checkpointNumber;
+        this.lastCheckpoint = lastCheckpoint;
     }
 
-    public Space getCheckPointSpace(){
-        return this.checkpointSpace;
+    public boolean lastCheckpoint(){
+        return this.lastCheckpoint;
     }
 
     public int getCheckPointNumber(){
