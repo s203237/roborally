@@ -159,6 +159,9 @@ private void drawWalls(){
         wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
         wallLine.setStrokeWidth(4); // Do day cua tuong
 
+        this.getChildren().add(wallLine);
+    }
+}
 
     /**
      * This method is used to determine how the gear are created in the space
