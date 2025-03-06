@@ -22,6 +22,9 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
@@ -176,11 +179,42 @@ public class SpaceView extends StackPane implements ViewObserver {
                 Image image = new Image(getClass().getResource("/Images/gear.png").toExternalForm(), 50, 50, false, false);
                 imageView.setImage(image);
                 this.getChildren().add(imageView);
+            }
 
-                if (gear != null) {
-                    Text i = new Text(gear.isRight() ? "right" : "left");
-                    this.getChildren().add(i);
+        }
+    }
+                /**
+     * Draws the action fields on the space (conveyor, gear and checkpoints)
+     */
+
+    public void drawConveyorBelt() {
+        for (FieldAction action : space.getActions()){
+            if (action instanceof ConveyorBelt conveyor) {
+                Heading heading = ((ConveyorBelt) action).getHeading();
+                Polygon conArrow = new Polygon(
+                        15.0, 0.0,
+                        0.0, 30.0,
+                        30.0, 30.0
+                );
+                conArrow.setFill(Color.LIGHTGRAY);
+
+                switch (heading) {
+                    case NORTH:
+                        conArrow.setRotate(0);
+                        break;
+                    case EAST:
+                        conArrow.setRotate(90);
+                        break;
+                    case SOUTH:
+                        conArrow.setRotate(180);
+                        break;
+                    case WEST:
+                        conArrow.setRotate(270);
+                        break;
+
                 }
+                this.getChildren().add(conArrow);
+
             }
         }
     }
