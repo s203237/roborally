@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Gear extends FieldAction {
     public enum GearType{LEFT, RIGHT}
-    private final GearType direction;
+    private GearType direction;
     public Gear(GearType direction){
         this.direction =direction;
     }
