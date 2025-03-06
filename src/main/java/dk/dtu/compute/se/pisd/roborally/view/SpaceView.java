@@ -98,7 +98,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             this.getChildren().add(arrow);
         }
     }
-<<<<<<< HEAD
+
 
     @Override
     public void updateView(Subject subject) {
@@ -169,8 +169,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
-=======
->>>>>>> e4d60c5 (starte with programs card)
+
     /**
      * This method is used to determine how the gear are created in the space
      */
@@ -236,20 +235,6 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
-    @Override
-    public void updateView(Subject subject) {
-        if (subject == this.space) {
-            this.getChildren().clear();
-
-            // XXX A3: drawing walls and action on the space (could be done
-            //         here); it would be even better if fixed things on
-            //         spaces  are only drawn once (and not on every update)
-
-            updateGears();
-            updatePlayer();
-
-        }
-    }
 
 
 

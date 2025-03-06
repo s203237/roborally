@@ -211,70 +211,66 @@ public class GameController {
         }
     }
 
+    /**
+     * Move the player forward in the direction they are facing
+     * First check if the player is on the correct board
+     * then determine the target space based on the player's current heading.
+     * if there is a wall blocking movement, the player remains in place.
+     * if the target space contains another player, the method attempts to push
+     * that player to the next available space in the same direction.
+     * if the target space is available, the player moves to the new position.
+     * if the adjacent space is occupied and can not be pushed, the player remains in place.
+     *
+     * @param player the player who is attempting to move forward
+     */
     // TODO V2
     public void moveForward(@NotNull Player player) {
-
+        if (player.board == board) {
+            Space space = player.getSpace();
+            Heading heading = player.getHeading();
+            Space target = board.getNeighbour(space, heading);
+            if (target == null) {
+                return;
+            }
+            if (target.getPlayer() != null) {
+                Space other = board.getNeighbour(target, heading);
+                if (other != null && other.getPlayer() == null)
+                    target.getPlayer().setSpace(other);
+                 } else {
+                     return;
+                }
+            player.setSpace(target);
+            }
     }
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
-
+        moveForward(player);
+        moveForward(player);
     }
 
     // TODO V2
     public void turnRight(@NotNull Player player) {
-
+        Heading heading = player.getHeading();
+        player.setHeading(heading.next());
     }
 
     // TODO V2
     public void turnLeft(@NotNull Player player) {
-
-    }
-    public void moveBackward(@NotNull Player player){
-
-    }
-    public void makeUTurn(@NotNull Player player){
-
+        Heading heading = player.getHeading();
+        player.setHeading(heading.prev());
     }
 
-    public void backward(@NotNull Player player) {
-
+    public void moveBackward(@NotNull Player player) {
+        makeUTurn(player);
+        moveForward(player);
+        makeUTurn(player);
     }
 
-    public void uTurn(@NotNull Player player) {
-
+    public void makeUTurn(@NotNull Player player) {
+        Heading heading = player.getHeading();
+        player.setHeading(heading.next().next());
     }
-
-    /**
-     * This method is used to check the new space is available for the current player moves.
-     * to check the walls -so the player can't wall through the walls
-     * to check if there is any player in the new space, if yes, move to make space available for current player.
-     *
-     * @param player
-     * @param target
-     * @param heading
-     */
-    public boolean moveToSpace(Player player, Space target, Heading heading) {
-        if (!target.getWalls().isEmpty() && target.getWalls().contains(heading.next().next())) {
-            return false;
-        } else if (!player.getSpace().getWalls().isEmpty() && player.getSpace().getWalls().contains(heading)) {
-            return false;
-        }
-        if (target.getPlayer()==null){
-            player.setSpace(target);
-            return true;
-        } else if (target.getPlayer()!=null) {
-            Space other = board.getNeighbour(target, heading);
-            boolean result = moveToSpace(target.getPlayer(),other,heading);
-            if(result!=false){
-                player.setSpace(target);
-                return true;
-            }else{
-                return false;
-            }
-        }else {return true;}
-    }
-
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
