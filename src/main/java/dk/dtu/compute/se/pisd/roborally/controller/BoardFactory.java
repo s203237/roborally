@@ -84,7 +84,7 @@ switch (name){
         Object[][] boardConfig = {
                 {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
                 {6, 5, new Walls(Walls.WallType.VERTICAL,Heading.SOUTH)},
-                {1, 1, new ConveyorBelt()},
+                {1, 1, new ConveyorBelt(Heading.EAST)},
                 {5, 5, new Checkpoint(1,false)},
                 {4,6, new Gear(Gear.GearType.LEFT)}
 

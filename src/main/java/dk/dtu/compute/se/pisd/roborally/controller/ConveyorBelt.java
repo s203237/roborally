@@ -39,8 +39,13 @@ public class ConveyorBelt extends FieldAction {
 
     private Heading heading;
 
-    public ConveyorBelt(Heading heading) {
-        this.heading = heading;
+   public ConveyorBelt(Heading heading) {
+        super();
+        this.heading =heading;
+    }
+    public ConveyorBelt() {
+        super();
+        this.heading = Heading.NORTH; // Default heading
     }
 
     public Heading getHeading() {
