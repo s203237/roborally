@@ -206,9 +206,14 @@ public class GameController {
         }
     }
 
-    // TODO V2
     public void moveForward(@NotNull Player player) {
+        Space currentSpace = player.getSpace();
+        Space neighbourSpace = board.getNeighbour(currentSpace, player.getHeading());
 
+        // if neigbour is null, there is a wall.
+        if(neighbourSpace!=null){
+            player.setSpace(neighbourSpace);
+        }
     }
 
     // TODO V2
@@ -216,14 +221,12 @@ public class GameController {
 
     }
 
-    // TODO V2
     public void turnRight(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().next());
     }
 
-    // TODO V2
     public void turnLeft(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().prev());
     }
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
