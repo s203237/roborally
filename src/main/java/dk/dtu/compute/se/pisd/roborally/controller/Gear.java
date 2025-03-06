@@ -25,8 +25,8 @@ public class Gear extends FieldAction {
     public boolean isRight() {
         return this.direction == GearType.RIGHT;
     }
-    public void setDirection (GearType direction){
-        this.direction = direction;
+    public GearType getDirection (){
+        return direction;
     }
 
     @Override
