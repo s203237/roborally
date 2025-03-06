@@ -189,7 +189,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         for(FieldAction action : space.getActions()){
             if(action instanceof Checkpoint){
                 int checkpointNumber = ((Checkpoint) action).getCheckPointNumber();
-                Circle checkpointCircle = new Circle(space.x,space.y,8);
+                Circle checkpointCircle = new Circle(space.x,space.y,16);
                 checkpointCircle.setFill(Color.YELLOW);
                 Text checkpointText = new Text(String.valueOf(checkpointNumber));
 
