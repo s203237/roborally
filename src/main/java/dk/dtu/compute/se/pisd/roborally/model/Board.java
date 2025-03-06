@@ -219,8 +219,20 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-
-        return getSpace(x, y);
+        Space neighbour = getSpace(x,y);
+        //check if there is an adjacent space
+        if(neighbour==null){
+            return null;
+        }
+        //check if there is a wall blocking the player at the current space.
+        if (space.getWalls().contains(heading)){
+            return null;
+        }
+        // check if the adjacent space has a wall facing the opposite players direction.
+        if(neighbour.getWalls().contains(heading.next().next())){
+            return null;
+        }
+        return neighbour;
     }
 
     public String getStatusMessage() {

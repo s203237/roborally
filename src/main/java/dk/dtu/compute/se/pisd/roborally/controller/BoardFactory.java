@@ -84,9 +84,14 @@ switch (name){
         Object[][] boardConfig = {
                 {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
                 {6, 5, new Walls(Walls.WallType.VERTICAL,Heading.SOUTH)},
+<<<<<<< HEAD
                 {1, 1, new ConveyorBelt(Heading.EAST)},
+=======
+//                {1, 1, new ConveyorBelt()},
+>>>>>>> programCard
                 {5, 5, new Checkpoint(1,false)},
                 {4,6, new Gear(Gear.GearType.LEFT)}
+
 
         };
 
@@ -94,15 +99,9 @@ switch (name){
     }
     private static void createAdvancedBoard(Board board){
         Object[][] boardConfig = {
-//                {0, 0, new Walls(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 0, new Walls(Heading.NORTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 1, new Walls(Heading.WEST), new ConveyorBelt(Heading.NORTH)},
-//                {5, 5, new Walls(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
-//                {6, 5, new ConveyorBelt(Heading.WEST)},
-//                {2, 2, new Gear(Gear.GearType.LEFT)},
-//                {4, 4, new Gear(Gear.GearType.RIGHT)},
-//                {3, 3, new Checkpoint(1)},
-//                {6, 6, new Checkpoint(2)}
+
+
+
         };
 
         applyBoardConfig(board, boardConfig);
@@ -125,6 +124,7 @@ switch (name){
                 Object component = config[i];
                 if (component instanceof Walls) {
                     space.getWalls().add(((Walls) component).getDirection());
+
                 } else if (component instanceof ConveyorBelt) {
                     space.getActions().add((ConveyorBelt) component);
                 } else if (component instanceof Gear) {
