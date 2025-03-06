@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
@@ -50,7 +51,6 @@ public class Space extends Subject {
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();
-    private Gear gear;
 
 
     public Space(Board board, int x, int y) {
@@ -58,8 +58,6 @@ public class Space extends Subject {
         this.x = x;
         this.y = y;
         player = null;
-        gear =null;
-
     }
 
     public Player getPlayer() {
@@ -84,12 +82,11 @@ public class Space extends Subject {
 
     /**
      * Adds the given checkpoint to the board and the board's checkpoint list
-     * @param space
      * @param checkpointNo
      * @return the new checkpoint
      */
-    public Checkpoint addCheckpoint(@NotNull Space space, int checkpointNo){
-        Checkpoint newCheckpoint = new Checkpoint(space, checkpointNo);
+    public Checkpoint addCheckpoint(int checkpointNo, boolean lastCheck){
+        Checkpoint newCheckpoint = new Checkpoint(checkpointNo, lastCheck);
         actions.add(newCheckpoint); // add to actions field list.
         return newCheckpoint;
     }
@@ -107,9 +104,6 @@ public class Space extends Subject {
         return walls;
     }
 
-    public Gear getGear(){
-        return gear;
-    }
 
     /**
      * Returns the list of field actions on this space.
@@ -137,11 +131,8 @@ public class Space extends Subject {
      * @param direction of gear ( left or right)
      */
     public void addGear(Gear.GearType direction){
-        if(this.gear == null){
-            this.gear = new Gear(direction);
-            this.actions.add(this.gear);
-            notifyChange();
-        }
+        this.actions.add(new Gear(direction));
+        notifyChange();
     }
     public void addWall(Heading heading) {
         if (!walls.contains(heading)) {

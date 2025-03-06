@@ -116,65 +116,24 @@ public class SpaceView extends StackPane implements ViewObserver {
 
 private void drawWalls(){
 
-    for (Heading wall : space.getWalls()) {
-        Line wallLine = new Line();
-
-        double startX = 0, startY = 0, endX = 0, endY = 0;
-
+    List<Heading> wallsHeading = space.getWalls();
+    for (Heading wall : wallsHeading) {
+        Pane pane = new Pane();
+        Line line = null;
         switch (wall) {
-            case NORTH:
-                startX = 0;
-                startY = 0;
-                endX = SPACE_WIDTH;
-                endY = 0;
-              //  if (wall == Heading.NORTH) {
-                    wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case EAST:
-                startX = SPACE_WIDTH;
-                startY = 0;
-                endX = SPACE_WIDTH;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                //wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case SOUTH:
-                startX = 0;
-                startY = SPACE_HEIGHT;
-                endX = SPACE_WIDTH;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                break;
-            case WEST:
-                startX = 0;
-                startY = 0;
-                endX = 0;
-                endY = SPACE_HEIGHT;
-                wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                break;
+            case EAST -> line = new Line(2, SPACE_WIDTH - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+            case NORTH -> line = new Line(2, 2, SPACE_WIDTH - 2, 2);
+            case WEST -> line = new Line(2, 2, 2, SPACE_HEIGHT - 2);
+            case SOUTH -> line = new Line(2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
         }
-        wallLine.setStartX(startX);
-        wallLine.setStartY(startY);
-        wallLine.setEndX(endX);
-        wallLine.setEndY(endY);
-        wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
-        wallLine.setStrokeWidth(4); // Do day cua tuong
+        line.setStroke(Color.RED);
+        line.setStrokeWidth(5);
+        pane.getChildren().add(line);
+        this.getChildren().add(pane);
 
-//        if (wall == Heading.NORTH) {
-//            wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-//        } else if (wall == Heading.SOUTH) {
-//            wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-//        } else if (wall == Heading.WEST) {
-//            wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-//        } else if (wall == Heading.EAST) {
-//            wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-//        }
-
-//        wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-//        wallLine.setTranslateX(-SPACE_HEIGHT/ 2.0);
-        this.getChildren().add(wallLine);
     }
 }
+
 
     /**
      * This method is used to determine how the gear are created in the space
