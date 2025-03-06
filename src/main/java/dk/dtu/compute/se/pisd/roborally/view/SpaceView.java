@@ -170,7 +170,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             if (action instanceof Gear) {
                 Gear gear = (Gear) action;
                 ImageView imageView = new ImageView();
-                Image image = new Image("Images/gear.png", 50, 50, false, false);
+                Image image = new Image(getClass().getResource("/Images/gear.png").toExternalForm(), 50, 50, false, false);
                 imageView.setImage(image);
                 this.getChildren().add(imageView);
 

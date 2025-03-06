@@ -72,23 +72,32 @@ switch (name){
 }
         return board;
     }
+
+    /** Using Object[][] to initialize the boards data
+     * each row represent a space on board,
+     * where the first two column define the coordinates (x,y) of space.
+     * and the remaining column contain elements like walls, conveyor belt, gear, checkpoint
+     *  Then use the function applyBoardConfig() to process and apply this data to the board.
+     * @param board the board where spaces and their elements will be configured.
+     */
     private static void createBasicBoard(Board board){
         Object[][] boardConfig = {
-//                {0, 0, new Wall(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 0, new Wall(Heading.NORTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 1, new Wall(Heading.WEST), new ConveyorBelt(Heading.NORTH)},
-//                {5, 5, new Wall(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
-//                {6, 5, new ConveyorBelt(Heading.WEST)}
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {6, 5, new Walls(Walls.WallType.VERTICAL,Heading.SOUTH)},
+                {1, 1, new ConveyorBelt()},
+                {5, 5, new Checkpoint(1,false)},
+                {4,6, new Gear(Gear.GearType.LEFT)}
+
         };
 
         applyBoardConfig(board, boardConfig);
     }
     private static void createAdvancedBoard(Board board){
         Object[][] boardConfig = {
-//                {0, 0, new Wall(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 0, new Wall(Heading.NORTH), new ConveyorBelt(Heading.WEST)},
-//                {1, 1, new Wall(Heading.WEST), new ConveyorBelt(Heading.NORTH)},
-//                {5, 5, new Wall(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
+//                {0, 0, new Walls(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
+//                {1, 0, new Walls(Heading.NORTH), new ConveyorBelt(Heading.WEST)},
+//                {1, 1, new Walls(Heading.WEST), new ConveyorBelt(Heading.NORTH)},
+//                {5, 5, new Walls(Heading.SOUTH), new ConveyorBelt(Heading.WEST)},
 //                {6, 5, new ConveyorBelt(Heading.WEST)},
 //                {2, 2, new Gear(Gear.GearType.LEFT)},
 //                {4, 4, new Gear(Gear.GearType.RIGHT)},
@@ -98,24 +107,32 @@ switch (name){
 
         applyBoardConfig(board, boardConfig);
     }
+
+    /** The method is used to process an Object[][] configuration and applies it to the given board.
+     * Iterates through each row to extract coordinates and board elements,
+     * then assigns these elements to the corresponding spaces on the board.
+     * @param board the board to which the configuration will be applied.
+     * @param boardConfig the Object[][] containing board elements
+     * "config" represents a row in Object[][], which contains the data for a space.
+     */
     private static void applyBoardConfig(Board board, Object[][] boardConfig) {
         for (Object[] config : boardConfig) {
             int x = (int) config[0];
             int y = (int) config[1];
             Space space = board.getSpace(x, y);
 
-//            for (int i = 2; i < config.length; i++) {
-//                Object component = config[i];
-//                if (component instanceof Wall) {
-//                    space.getWalls().add(((Wall) component).getHeading());
-//                } else if (component instanceof ConveyorBelt) {
-//                    space.getActions().add((ConveyorBelt) component);
-//                } else if (component instanceof Gear) {
-//                    space.getActions().add((Gear) component);
-//                } else if (component instanceof Checkpoint) {
-//                    space.getActions().add((Checkpoint) component);
-//                }
-//            }
+            for (int i = 2; i < config.length; i++) {
+                Object component = config[i];
+                if (component instanceof Walls) {
+                    space.getWalls().add(((Walls) component).getDirection());
+                } else if (component instanceof ConveyorBelt) {
+                    space.getActions().add((ConveyorBelt) component);
+                } else if (component instanceof Gear) {
+                    space.getActions().add((Gear) component);
+                } else if (component instanceof Checkpoint) {
+                    space.getActions().add((Checkpoint) component);
+                }
+            }
         }
     }
 }
