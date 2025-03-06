@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class GameController {
 
@@ -44,7 +43,7 @@ public class GameController {
      *
      * @param space the space to which the current player should move
      */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
+    public void moveCurrentPlayerToSpace(@NotNull Space space) {
         // TODO V1: method should be implemented by the students:
         //   - the current player should be moved to the given space
         //     (if it is free())
@@ -55,19 +54,19 @@ public class GameController {
         //     message needs to be implemented at another place)
 
         Player current = board.getCurrentPlayer();// create a player
-        if(space!= null && space.getPlayer()==null){
+        if (space != null && space.getPlayer() == null) {
             current.setSpace(space);
             int n = board.getPlayerNumber(current);
-            Player next = board.getPlayer((n+1)%board.getPlayersNumber());
+            Player next = board.getPlayer((n + 1) % board.getPlayersNumber());
             board.setCurrentPlayer(next);
             //Increment steps
-            board.setCounterSteps(board.getCounterSteps()+1);
+            board.setCounterSteps(board.getCounterSteps() + 1);
         }
 
     }
 
     // XXX V2
-    public voidstartProgrammingPhase() {
+    public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
@@ -200,7 +199,7 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
-                case BACK_UP:
+                case BACKWARD:
                     this.moveBackward(player);
                     break;
                 case U_TURN:
@@ -237,6 +236,45 @@ public class GameController {
     public void makeUTurn(@NotNull Player player){
 
     }
+
+    public void backward(@NotNull Player player) {
+
+    }
+
+    public void uTurn(@NotNull Player player) {
+
+    }
+
+    /**
+     * This method is used to check the new space is available for the current player moves.
+     * to check the walls -so the player can't wall through the walls
+     * to check if there is any player in the new space, if yes, move to make space available for current player.
+     *
+     * @param player
+     * @param target
+     * @param heading
+     */
+    public boolean moveToSpace(Player player, Space target, Heading heading) {
+        if (!target.getWalls().isEmpty() && target.getWalls().contains(heading.next().next())) {
+            return false;
+        } else if (!player.getSpace().getWalls().isEmpty() && player.getSpace().getWalls().contains(heading)) {
+            return false;
+        }
+        if (target.getPlayer()==null){
+            player.setSpace(target);
+            return true;
+        } else if (target.getPlayer()!=null) {
+            Space other = board.getNeighbour(target, heading);
+            boolean result = moveToSpace(target.getPlayer(),other,heading);
+            if(result!=false){
+                player.setSpace(target);
+                return true;
+            }else{
+                return false;
+            }
+        }else {return true;}
+    }
+
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
