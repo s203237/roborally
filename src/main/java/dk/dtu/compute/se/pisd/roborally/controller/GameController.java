@@ -208,7 +208,12 @@ public class GameController {
 
     // TODO V2
     public void moveForward(@NotNull Player player) {
-
+        Space currentSpace = player.getSpace();
+        var neighbourSpace = board.getNeighbour(currentSpace, player.getHeading());
+        //neighbour space is null, if there is a wall preventing the player to move there.
+        if(neighbourSpace!=null){
+            player.setSpace(neighbourSpace);
+        }
     }
 
     // TODO V2
