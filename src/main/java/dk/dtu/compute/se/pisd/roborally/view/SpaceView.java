@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
@@ -32,6 +33,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
@@ -106,6 +108,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             drawWalls();
             updateGears();
             updatePlayer();
+            updateCheckpoints();
 
         }
     }
@@ -180,6 +183,19 @@ public class SpaceView extends StackPane implements ViewObserver {
                 }
             }
         }
+    }
 
+    public void updateCheckpoints(){
+        for(FieldAction action : space.getActions()){
+            if(action instanceof Checkpoint){
+                int checkpointNumber = ((Checkpoint) action).getCheckPointNumber();
+                Circle checkpointCircle = new Circle(space.x,space.y,8);
+                checkpointCircle.setFill(Color.YELLOW);
+                Text checkpointText = new Text(String.valueOf(checkpointNumber));
+
+                this.getChildren().add(checkpointCircle);
+                this.getChildren().add(checkpointText);
+            }
+        }
     }
 }
