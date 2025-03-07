@@ -37,18 +37,19 @@ public class CheckpointTest {
         System.out.println("--Test1<The correct path> --");
         System.out.println("Player current pos: x = " + player.getSpace().x + ", y = " + player.getSpace().y);
 
+    //Add checkpoints to spaces
         Space space1 = board.getSpace(1,0); //Checkpoint 1
         Space space2 = board.getSpace(1,1);
-        Checkpoint checkpoint1 = new Checkpoint(space1, 1);
-        Checkpoint checkpoint2 = new Checkpoint(space2, 2);//Checkpoint 2
+        var checkpoint1 = space1.addCheckpoint(1, false);
+        var checkpoint2 = space2.addCheckpoint(2, true);//Checkpoint 2
 
-        //Moving to checkpoint 1:
+    //Moving to checkpoint 1:
         System.out.println("<Moving player to first checkpoint>");
         gameController.moveCurrentPlayerToSpace(space1);
         System.out.println("player moved to: x = " + player.getSpace().x + " y = " + player.getSpace().y);
         System.out.println("First checkpoint hit: " + checkpoint1.doAction(gameController, space1));
 
-        //Moving to checkpoint 2
+    //Moving to checkpoint 2
         System.out.println("\n<Moving player to second checkpoint>");
         gameController.moveCurrentPlayerToSpace(space2);
         System.out.println("player moved to: x = " + player.getSpace().x + " y = " + player.getSpace().y);
@@ -63,19 +64,19 @@ public class CheckpointTest {
         System.out.println("\n--Test2 - The wrong path--");
         System.out.println("Player current pos: x = " + player.getSpace().x + ", y = " + player.getSpace().y);
 
-
-        Space space1 = board.getSpace(1,0); //Checkpoint 1
+    //Add checkpoints to spaces
+        Space space1 = board.getSpace(1,0);
         Space space2 = board.getSpace(1,1);
-        Checkpoint checkpoint1 = new Checkpoint(space1, 1);
-        Checkpoint checkpoint2 = new Checkpoint(space2, 2);//Checkpoint 2
+        var checkpoint1 = space1.addCheckpoint(1, false);
+        var checkpoint2 = space2.addCheckpoint(2, true);
 
-        //Moving to checkpoint 2:
+    //Moving to checkpoint 2:
         System.out.println("<Moving player to second checkpoint>");
         gameController.moveCurrentPlayerToSpace(space2);
         System.out.println("player moved to: x = " + player.getSpace().x + " y = " + player.getSpace().y);
         System.out.println("Second checkpoint hit: " + checkpoint2.doAction(gameController, space2));
 
-        //Moving to checkpoint 1:
+    //Moving to checkpoint 1:
 
         System.out.println("\n<Moving player to first checkpoint>");
         gameController.moveCurrentPlayerToSpace(space1);
