@@ -22,6 +22,9 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
@@ -96,6 +99,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
@@ -106,6 +110,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             //         spaces  are only drawn once (and not on every update)
 
             drawWalls();
+            drawConveyorBelt();
             updateGears();
             updatePlayer();
             updateCheckpoints();
@@ -118,52 +123,23 @@ public class SpaceView extends StackPane implements ViewObserver {
      */
 
     private void drawWalls() {
-        for (Heading wall : space.getWalls()) {
-            Line wallLine = new Line();
-            double startX = 0, startY = 0, endX = 0, endY = 0;
-
+        List<Heading> wallsHeading = space.getWalls();
+        for (Heading wall : wallsHeading) {
+            Pane pane = new Pane();
+            Line line = null;
             switch (wall) {
-                case NORTH:
-                    startX = 0;
-                    startY = 0;
-                    endX = SPACE_WIDTH;
-                    endY = 0;
-                    //  if (wall == Heading.NORTH) {
-                    wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                    break;
-                case EAST:
-                    startX = SPACE_WIDTH;
-                    startY = 0;
-                    endX = SPACE_WIDTH;
-                    endY = SPACE_HEIGHT;
-                    wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                    //wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                    break;
-                case SOUTH:
-                    startX = 0;
-                    startY = SPACE_HEIGHT;
-                    endX = SPACE_WIDTH;
-                    endY = SPACE_HEIGHT;
-                    wallLine.setTranslateY(SPACE_HEIGHT / 2.0);
-                    break;
-                case WEST:
-                    startX = 0;
-                    startY = 0;
-                    endX = 0;
-                    endY = SPACE_HEIGHT;
-                    wallLine.setTranslateX(-SPACE_WIDTH / 2.0);
-                    break;
+                case EAST -> line = new Line(SPACE_WIDTH - 2, 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
+                case NORTH -> line = new Line(2, 2, SPACE_WIDTH - 2, 2);
+                case WEST -> line = new Line(2, 2, 2, SPACE_HEIGHT - 2);
+                case SOUTH -> line = new Line(2, SPACE_HEIGHT - 2, SPACE_WIDTH - 2, SPACE_HEIGHT - 2);
             }
-            wallLine.setStartX(startX);
-            wallLine.setStartY(startY);
-            wallLine.setEndX(endX);
-            wallLine.setEndY(endY);
-            wallLine.setStroke(Color.RED); // to mau tuong (co the doi mau khac)
-            wallLine.setStrokeWidth(4); // Do day cua tuong
-
-            this.getChildren().add(wallLine);
+            line.setStroke(Color.RED);
+            line.setStrokeWidth(5);
+            pane.getChildren().add(line);
+            this.getChildren().add(pane);
         }
     }
+
 
     /**
      * This method is used to determine how the gear are created in the space
@@ -176,11 +152,47 @@ public class SpaceView extends StackPane implements ViewObserver {
                 Image image = new Image(getClass().getResource("/Images/gear.png").toExternalForm(), 50, 50, false, false);
                 imageView.setImage(image);
                 this.getChildren().add(imageView);
-
-                if (gear != null) {
-                    Text i = new Text(gear.isRight() ? "right" : "left");
+                if(gear!=null){
+                    Text i= new Text(gear.isRight()?"right":"left");
                     this.getChildren().add(i);
                 }
+
+            }
+
+        }
+    }
+                /**
+     * Draws the action fields on the space (conveyor, gear and checkpoints)
+     */
+
+    public void drawConveyorBelt() {
+        for (FieldAction action : space.getActions()){
+            if (action instanceof ConveyorBelt conveyor) {
+                Heading heading = ((ConveyorBelt) action).getHeading();
+                Polygon conArrow = new Polygon(
+                        15.0, 0.0,
+                        0.0, 30.0,
+                        30.0, 30.0
+                );
+                conArrow.setFill(Color.LIGHTGRAY);
+
+                switch (heading) {
+                    case NORTH:
+                        conArrow.setRotate(0);
+                        break;
+                    case EAST:
+                        conArrow.setRotate(90);
+                        break;
+                    case SOUTH:
+                        conArrow.setRotate(180);
+                        break;
+                    case WEST:
+                        conArrow.setRotate(270);
+                        break;
+
+                }
+                this.getChildren().add(conArrow);
+
             }
         }
     }
@@ -198,4 +210,9 @@ public class SpaceView extends StackPane implements ViewObserver {
             }
         }
     }
+
+
+
+
+
 }
