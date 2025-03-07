@@ -37,7 +37,7 @@ public enum Command {
     FAST_FORWARD("Fast Fwd"),
 
     U_TURN("U-turn"),
-    BACKWARD("Backward");
+    BACKWARD("Bwd");
 
 
 
