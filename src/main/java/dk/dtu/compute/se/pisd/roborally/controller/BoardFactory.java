@@ -84,13 +84,22 @@ switch (name){
         Object[][] boardConfig = {
                 {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
                 {6, 5, new Walls(Walls.WallType.VERTICAL,Heading.SOUTH)},
-<<<<<<< HEAD
-                {1, 1, new ConveyorBelt(Heading.EAST)},
-=======
-//                {1, 1, new ConveyorBelt()},
->>>>>>> programCard
-                {5, 5, new Checkpoint(1,false)},
-                {4,6, new Gear(Gear.GearType.LEFT)}
+                {7, 4, new Walls(Walls.WallType.VERTICAL,Heading.NORTH)},
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {1, 3, new Walls(Walls.WallType.VERTICAL,Heading.NORTH)},
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {1, 3, new ConveyorBelt(Heading.SOUTH)},
+                {1, 4, new ConveyorBelt(Heading.SOUTH)},
+                {1, 5, new ConveyorBelt(Heading.EAST)},
+                {2, 5, new ConveyorBelt(Heading.EAST)},
+                {4, 1, new ConveyorBelt(Heading.EAST)},
+                {5, 1, new ConveyorBelt(Heading.EAST)},
+                {5, 2, new ConveyorBelt(Heading.NORTH)},
+                {5, 3, new ConveyorBelt(Heading.NORTH)},
+                {7, 4, new Checkpoint(1,false)},
+                {2, 3, new Checkpoint(2,false)},
+                {2,2, new Gear(Gear.GearType.LEFT)},
+                {6,4, new Gear(Gear.GearType.RIGHT)},
 
 
         };
@@ -99,7 +108,28 @@ switch (name){
     }
     private static void createAdvancedBoard(Board board){
         Object[][] boardConfig = {
-
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {6, 5, new Walls(Walls.WallType.VERTICAL,Heading.SOUTH)},
+                {7, 4, new Walls(Walls.WallType.VERTICAL,Heading.NORTH)},
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {1, 3, new Walls(Walls.WallType.VERTICAL,Heading.NORTH)},
+                {3, 4, new Walls(Walls.WallType.VERTICAL,Heading.WEST)},
+                {1, 3, new ConveyorBelt(Heading.SOUTH)},
+                {1, 4, new ConveyorBelt(Heading.SOUTH)},
+                {1, 5, new ConveyorBelt(Heading.EAST)},
+                {2, 5, new ConveyorBelt(Heading.EAST)},
+                {4, 1, new ConveyorBelt(Heading.EAST)},
+                {5, 1, new ConveyorBelt(Heading.EAST)},
+                {5, 2, new ConveyorBelt(Heading.NORTH)},
+                {5, 3, new ConveyorBelt(Heading.NORTH)},
+                {7, 5, new Checkpoint(4,false)},
+                {2, 1, new Checkpoint(3,false)},
+                {1, 6, new Checkpoint(2,false)},
+                {5, 0, new Checkpoint(1,false)},
+                {1,2, new Gear(Gear.GearType.LEFT)},
+                {6,0, new Gear(Gear.GearType.RIGHT)},
+                {0,6, new Gear(Gear.GearType.RIGHT)},
+                {6,4, new Gear(Gear.GearType.LEFT)},
 
 
         };
