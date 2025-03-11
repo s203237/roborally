@@ -229,44 +229,67 @@ public class GameController {
             Space space = player.getSpace();
             Heading heading = player.getHeading();
             Space target = board.getNeighbour(space, heading);
-            if (target == null) {
-                return;
-            }
-            if (target.getPlayer() != null) {
-                Space other = board.getNeighbour(target, heading);
-                if (other != null && other.getPlayer() == null)
-                    target.getPlayer().setSpace(other);
-                 } else {
-                     return;
+            if (target != null) {
+                Player other = target.getPlayer();
+                Space nextSpace = board.getNeighbour(target, heading);
+
+                if (other != null && nextSpace != null && nextSpace.getPlayer() == null) {
+                    other.setSpace(nextSpace);
                 }
-            player.setSpace(target);
+
+                if (other == null || nextSpace != null && nextSpace.getPlayer() == null)
+                    player.setSpace(target);
+
             }
+        }
+
     }
 
     // TODO V2
+    /**
+     * Move the player forward two cells in the direction they are facing
+     * @param player the player who is attempting to move forward
+     */
     public void fastForward(@NotNull Player player) {
         moveForward(player);
         moveForward(player);
     }
 
     // TODO V2
+
+    /**
+     * Method is used to turn players direction to the right
+     * @param player the player who is attempting to turn right
+     */
     public void turnRight(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.next());
     }
 
     // TODO V2
+
+    /**
+     * Method is used to turn players direction to the left
+     * @param player the player who is attempting to turn left
+     */
     public void turnLeft(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.prev());
     }
 
+    /**
+     * Method is used to turn players direction to backward and move forward one cell.
+     * @param player the player who is attempting to move backward
+     */
     public void moveBackward(@NotNull Player player) {
         makeUTurn(player);
         moveForward(player);
-        makeUTurn(player);
+//        makeUTurn(player);
     }
-
+    /**
+     * Method is used to turn players direction to backward
+     * @param player the player who is attempting to make u_turn
+     */
     public void makeUTurn(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.next().next());

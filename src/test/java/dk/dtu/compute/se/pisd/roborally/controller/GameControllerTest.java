@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,8 +47,8 @@ class GameControllerTest {
         Assertions.assertEquals(player, board.getSpace(0, 4).getPlayer(), "Player " + player.getName() + " should be on Space (0,4)!");
     }
 
-    /*
-        The following tests should be used later for assignment V2
+
+//     The following tests should be used later for assignment V2
 
     @Test
     void moveCurrentPlayerToSpace() {
@@ -66,16 +67,62 @@ class GameControllerTest {
     void moveForward() {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
-
         gameController.moveForward(current);
 
         Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
     }
+    @Test
+    void moveForward_WithWallInSpace() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Space space = current.getSpace();
+        space.addWall(current.getHeading());
+        gameController.moveForward(current);
 
-     */
+        Assertions.assertEquals(current, space.getPlayer());
+        Space forwardSpace = board.getNeighbour(space,current.getHeading());
+           Assertions.assertTrue(forwardSpace ==null|| forwardSpace.getPlayer()==null,"Player can not move forward because of wall");
+    }
+    @Test
+    void moveForward_WithWallInNeighbourSpace() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Space space = current.getSpace();
+        Space forwardSpace = board.getNeighbour(space,current.getHeading());
+        forwardSpace.addWall(current.getHeading().next().next());
+        gameController.moveForward(current);
 
-    // TDOD and there should be more tests added for the different assignments eventually
+        Assertions.assertEquals(current, space.getPlayer());
+        Assertions.assertTrue(forwardSpace ==null|| forwardSpace.getPlayer()==null,"Player can not move forward because of wall");
+    }
+    @Test
+    void moveForward_WithAnotherPlayerInNeighbourSpace() {
+        Board board = gameController.board;
+        Player current = board.getCurrentPlayer();
+        Space space = current.getSpace();
+        Space forwardSpace = board.getNeighbour(space,current.getHeading());
+
+        Assertions.assertNotNull(forwardSpace,"Forward space should exist!");
+        if (forwardSpace.getPlayer() == null) {
+            Player other = new Player(board, "","Other");
+            other.setSpace(forwardSpace);
+        }
+        Player expectOther = forwardSpace.getPlayer();
+        Assertions.assertNotNull(expectOther,"There should be another player in the forward space!");
+        Space nextSpace = board.getNeighbour(forwardSpace,current.getHeading());
+
+        boolean canOtherMove = (nextSpace != null && nextSpace.getPlayer() == null);
+        gameController.moveForward(current);
+        Assertions.assertEquals(current,forwardSpace.getPlayer(),"Current player should move to the forward space");
+
+        if(canOtherMove){
+            Assertions.assertEquals(expectOther,nextSpace.getPlayer(),"Other player should be pushed to the next space");
+        }else{
+           Assertions.assertEquals(expectOther,forwardSpace.getPlayer(),"Other player should remain in forward space if push is not possible!");
+        }
+        Assertions.assertNull(space.getPlayer(),"space should be empty");
+    }
 
 }
