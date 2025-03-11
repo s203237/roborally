@@ -247,4 +247,28 @@ public class Board extends Subject {
         return"Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
     }
 
+    public Space getLastCheckpoint(Board board){
+
+        int checkpointNumber = 0;
+        Space lastCheckPointSpace = board.getSpace(0,0);
+
+        //Iterate through all spaces
+        for( var i = 0; i < board.spaces.length; i++){
+            for(var j = 0; j < board.spaces[i].length; j++){
+                Space currentSpace = board.getSpace(i, j);
+                if(currentSpace.getActions() instanceof Checkpoint){
+                    if(((Checkpoint) currentSpace.getActions()).getCheckPointNumber()>checkpointNumber){
+                        lastCheckPointSpace=currentSpace;
+                        checkpointNumber=((Checkpoint) currentSpace.getActions()).getCheckPointNumber();
+                    }
+                }
+            }
+        }
+        if(checkpointNumber==0){
+            throw new IllegalStateException("No checkpoints initialized");
+        }
+        return lastCheckPointSpace;
+
+    }
+
 }

@@ -61,15 +61,15 @@ public class BoardFactory {
         } else {
             board = new Board(8,8, name);
         }
-switch (name){
-    case "Basic Board":
-        createBasicBoard(board);
-        break;
-    case "Advanced Board":
-        createAdvancedBoard(board);
-        break;
-    default: System.out.println("Unknown board:"+name);
-}
+        switch (name){
+            case "Basic Board":
+                createBasicBoard(board);
+                break;
+            case "Advanced Board":
+                createAdvancedBoard(board);
+                break;
+            default: System.out.println("Unknown board:"+name);
+        }
         return board;
     }
 

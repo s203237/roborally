@@ -4,7 +4,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CheckpointTest {
+public class CheckpointExecutionTest {
 
     private final int TEST_WIDTH = 8;
     private final int TEST_HEIGHT = 8;
