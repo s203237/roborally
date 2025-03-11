@@ -64,6 +64,11 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private GameController gameController;
 
+    /**
+     * Constructs a new PlayerView for the given player in the game.
+     * @param gameController The game controller managing the game
+     * @param player The player associated with this view
+     */
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
@@ -73,13 +78,14 @@ public class PlayerView extends Tab implements ViewObserver {
 
         this.gameController = gameController;
         this.player = player;
-
+        // Label for displaying the program cards section
         programLabel = new Label("Program");
-
+        // GridPane for holding the program cards
         programPane = new GridPane();
         programPane.setVgap(2.0);
         programPane.setHgap(2.0);
         programCardViews = new CardFieldView[Player.NO_REGISTERS];
+        // Initialize the program card fields
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
             CommandCardField cardField = player.getProgramField(i);
             if (cardField != null) {
@@ -95,6 +101,7 @@ public class PlayerView extends Tab implements ViewObserver {
         // TODO V2: the following buttons should be associated with the proper methods
         //          in the game controller
 
+        // Buttons for controlling the player's actions
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
 
@@ -104,19 +111,21 @@ public class PlayerView extends Tab implements ViewObserver {
         stepButton = new Button("Execute Current Register");
         stepButton.setOnAction( e-> gameController.executeStep());
 
+        // Panel for buttons
         buttonPanel = new VBox(finishButton, executeButton, stepButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
         buttonPanel.setSpacing(3.0);
-
+        // Panel for interactive player options
         playerInteractionPanel = new VBox();
         playerInteractionPanel.setAlignment(Pos.CENTER_LEFT);
         playerInteractionPanel.setSpacing(3.0);
-
+        // Label for displaying command cards section
         cardsLabel = new Label("Command Cards");
         cardsPane = new GridPane();
         cardsPane.setVgap(2.0);
         cardsPane.setHgap(2.0);
         cardViews = new CardFieldView[Player.NO_CARDS];
+        // Initialize the command card fields
         for (int i = 0; i < Player.NO_CARDS; i++) {
             CommandCardField cardField = player.getCardField(i);
             if (cardField != null) {
@@ -124,7 +133,7 @@ public class PlayerView extends Tab implements ViewObserver {
                 cardsPane.add(cardViews[i], i, 0);
             }
         }
-
+        // Add UI components to the view
         top.getChildren().add(programLabel);
         top.getChildren().add(programPane);
         top.getChildren().add(cardsLabel);
@@ -133,16 +142,23 @@ public class PlayerView extends Tab implements ViewObserver {
         // TODO A3 add a label for the status of this player could be added here
         //      ege showing the number of achieved chekpoints (etc).
 
+        // Attach this view to the player's board and update the UI
         if (player.board != null) {
             player.board.attach(this);
             update(player.board);
         }
     }
 
+    /**
+     * Updates the player view based on the current state of the game board.
+     *
+     * @param subject The game board that is being observed.
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
             // TODO A3 update the status label for this player
+            // Update the display of program cards based on the game phase
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
                 if (cardFieldView != null) {
@@ -165,7 +181,7 @@ public class PlayerView extends Tab implements ViewObserver {
                     }
                 }
             }
-
+            // Manage buttons based on the game phase
             if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
                 if (!programPane.getChildren().contains(buttonPanel)) {
                     programPane.getChildren().remove(playerInteractionPanel);
@@ -203,7 +219,7 @@ public class PlayerView extends Tab implements ViewObserver {
                     programPane.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
                 }
                 playerInteractionPanel.getChildren().clear();
-
+                // If the current player is in an interaction phase, show options
                 if (player.board.getCurrentPlayer() == player) {
                     // TODO V3: these buttons should be shown only when there is
                     //      an interactive command card, and the buttons should represent
@@ -224,3 +240,4 @@ public class PlayerView extends Tab implements ViewObserver {
     }
 
 }
+

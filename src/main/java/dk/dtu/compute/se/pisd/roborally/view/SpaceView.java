@@ -56,7 +56,12 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     public final Space space;
 
-
+    /**
+     * Constructs a SpaceView for the given space.
+     * Initializes the size, background color, and attaches the space as an observer.
+     *
+     * @param space The space that this view represents.
+     */
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
@@ -82,6 +87,10 @@ public class SpaceView extends StackPane implements ViewObserver {
         update(space);
     }
 
+    /**
+     * Updates the player representation in this space.
+     * If a player is present, an arrow is drawn in the direction the player is facing.
+     */
     private void updatePlayer() {
         Player player = space.getPlayer();
         if (player != null) {
@@ -99,7 +108,12 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
-
+    /**
+     * Updates the view when the observed subject (space) changes.
+     * Clears the existing graphical elements, redraws walls,checkpoint, conveyor belt and updates the player representation.
+     *
+     * @param subject The observed subject (should be the space associated with this view).
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
@@ -109,6 +123,9 @@ public class SpaceView extends StackPane implements ViewObserver {
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
 
+//            updateGears();
+            updateCheckpoints();
+            drawConveyorBelt();
             drawWalls();
             updatePlayer();
         }
@@ -117,7 +134,6 @@ public class SpaceView extends StackPane implements ViewObserver {
     /**
      * Draw the wall icons
      */
-
 
     private void drawWalls() {
 
@@ -141,28 +157,28 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
 
+//            /**
+//             * This method is used to determine how the gear are created in the space
+//             */
+//            public void updateGears () {
+//                for (FieldAction action : space.getActions()) {
+//                    if (action instanceof Gear) {
+//                        Gear gear = (Gear) action;
+//                        ImageView imageView = new ImageView();
+//                        Image image = new Image(getClass().getResource("/Images/gear.png").toExternalForm(), 40, 40, false, false);
+//                        imageView.setImage(image);
+//                        this.getChildren().add(imageView);
+//                        if (gear != null) {
+//                            Text i = new Text(gear.isRight() ? "right" : "left");
+//                            this.getChildren().add(i);
+//                        }
+//
+//                    }
+//
+//                }
+//            }
             /**
-             * This method is used to determine how the gear are created in the space
-             */
-            public void updateGears () {
-                for (FieldAction action : space.getActions()) {
-                    if (action instanceof Gear) {
-                        Gear gear = (Gear) action;
-                        ImageView imageView = new ImageView();
-                        Image image = new Image(getClass().getResource("/Images/gear.png").toExternalForm(), 40, 40, false, false);
-                        imageView.setImage(image);
-                        this.getChildren().add(imageView);
-                        if (gear != null) {
-                            Text i = new Text(gear.isRight() ? "right" : "left");
-                            this.getChildren().add(i);
-                        }
-
-                    }
-
-                }
-            }
-            /**
-             * Draws the action fields on the space (conveyor, gear and checkpoints)
+             * Draws the  conveyor belt on the space
              */
 
             public void drawConveyorBelt () {
@@ -196,7 +212,9 @@ public class SpaceView extends StackPane implements ViewObserver {
                     }
                 }
             }
-
+    /**
+     * Draws the  check point on the space
+     */
             public void updateCheckpoints () {
                 for (FieldAction action : space.getActions()) {
                     if (action instanceof Checkpoint) {

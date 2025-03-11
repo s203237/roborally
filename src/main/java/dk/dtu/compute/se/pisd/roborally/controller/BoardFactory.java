@@ -98,8 +98,8 @@ switch (name){
                 {5, 3, new ConveyorBelt(Heading.NORTH)},
                 {7, 4, new Checkpoint(1,false)},
                 {2, 3, new Checkpoint(2,false)},
-                {2,2, new Gear(Gear.GearType.LEFT)},
-                {6,4, new Gear(Gear.GearType.RIGHT)},
+//                {2,2, new Gear(Gear.GearType.LEFT)},
+//                {6,4, new Gear(Gear.GearType.RIGHT)},
 
 
         };
@@ -135,10 +135,10 @@ switch (name){
                 {2, 1, new Checkpoint(3,false)},
                 {1, 6, new Checkpoint(2,false)},
                 {5, 0, new Checkpoint(1,false)},
-                {2,2, new Gear(Gear.GearType.LEFT)},
-                {6,0, new Gear(Gear.GearType.RIGHT)},
-                {0,6, new Gear(Gear.GearType.RIGHT)},
-                {6,4, new Gear(Gear.GearType.LEFT)},
+//                {2,2, new Gear(Gear.GearType.LEFT)},
+//                {6,0, new Gear(Gear.GearType.RIGHT)},
+//                {0,6, new Gear(Gear.GearType.RIGHT)},
+//                {6,4, new Gear(Gear.GearType.LEFT)},
 
 
         };

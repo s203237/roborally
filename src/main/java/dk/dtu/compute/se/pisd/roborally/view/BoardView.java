@@ -37,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class BoardView extends VBox implements ViewObserver {
 
@@ -52,35 +51,48 @@ public class BoardView extends VBox implements ViewObserver {
 
     private SpaceEventHandler spaceEventHandler;
 
+
+    /**
+     * Constructs a BoardView for the given game controller.
+     *
+     * @param gameController The game controller managing the game logic.
+     */
+
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
-
+        // Initialize UI components
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
-
+        // Add components to the BoardView
         this.getChildren().add(mainBoardPane);
         this.getChildren().add(playersView);
         this.getChildren().add(statusLabel);
-
+        // Initialize space views
         spaces = new SpaceView[board.width][board.height];
-
+        // Initialize event handler for space interactions
         spaceEventHandler = new SpaceEventHandler(gameController);
-
+        // Populate the board with spaces and add click event handlers
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
                 Space space = board.getSpace(x, y);
                 SpaceView spaceView = new SpaceView(space);
                 spaces[x][y] = spaceView;
                 mainBoardPane.add(spaceView, x, y);
-                spaceView.setOnMouseClicked(spaceEventHandler);
+                spaceView.setOnMouseClicked(e -> gameController.moveCurrentPlayerToSpace(space));
             }
         }
-
+        // Attach this view to the board for updates
         board.attach(this);
         update(board);
     }
 
+    /**
+     * Updates the board view when notified by the observed subject (board).
+     * This method updates the status label based on the current game phase.
+     *
+     * @param subject The subject (game board) that triggered the update.
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject == board) {
@@ -89,16 +101,31 @@ public class BoardView extends VBox implements ViewObserver {
         }
     }
 
+    /**
+     * The SpaceEventHandler class handles mouse click events on board spaces.
+     * It allows players to be moved explicitly for testing purposes.
+     */
     // XXX this handler and its uses should eventually be deleted! This is just to help test the
     //     behaviour of the game by being able to explicitly move the players on the board!
     private class SpaceEventHandler implements EventHandler<MouseEvent> {
 
         final public GameController gameController;
 
+        /**
+         * Constructs a SpaceEventHandler for managing space interactions.
+         *
+         * @param gameController The game controller handling the game logic.
+         */
         public SpaceEventHandler(@NotNull GameController gameController) {
             this.gameController = gameController;
         }
 
+        /**
+         * Handles mouse click events on spaces.
+         * Moves the current player to the clicked space if it belongs to the same board.
+         *
+         * @param event The mouse event triggered by a space click.
+         */
         @Override
         public void handle(MouseEvent event) {
             Object source = event.getSource();

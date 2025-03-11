@@ -67,6 +67,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Start the programming phase, sets the first player, and distributes command cords.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -75,11 +79,13 @@ public class GameController {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {
+                // clear previously programmed commands
                 for (int j = 0; j < Player.NO_REGISTERS; j++) {
                     CommandCardField field = player.getProgramField(j);
                     field.setCard(null);
                     field.setVisible(true);
                 }
+                // distribute new command cards to the player
                 for (int j = 0; j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
                     field.setCard(generateRandomCommandCard());
@@ -90,6 +96,11 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Generates a random command card from the available commands.
+     * @return commandCard the randomly selected command card.
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
@@ -97,6 +108,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Ends the programming phase and transitions to the activation phase.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -106,6 +121,11 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Makes the program field of the players visible at the specified index.
+     * @param register the index of the program field to be made visible.
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -117,6 +137,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Hides all program fields of the players.
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -128,18 +152,28 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Executes all player's programs in the activation phase
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
     // XXX V2
+    /**
+     * Executes the program step by step.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
     // XXX V2
+    /**
+     * Continues executing programs until the activation phase is completed.
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
@@ -147,6 +181,9 @@ public class GameController {
     }
 
     // XXX V2
+    /**
+     * Executes the next step in the current player's program.
+     */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -181,6 +218,12 @@ public class GameController {
     }
 
     // XXX V2
+    /**
+     * Executes the given command for the specified player.
+     *
+     * @param player The player executing the command.
+     * @param command The command to be executed.
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
