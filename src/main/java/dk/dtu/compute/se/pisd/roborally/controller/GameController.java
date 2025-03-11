@@ -154,6 +154,10 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
+                    if (command.isInteractive()) {
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
+                    }
                     executeCommand(currentPlayer, command);
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
@@ -161,6 +165,8 @@ public class GameController {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
                     step++;
+                    actionFileds(step);
+
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
@@ -211,6 +217,19 @@ public class GameController {
         }
     }
 
+    public void actionFileds(int step){
+        if(step>=Player.NO_REGISTERS){
+            for(int i =0;i<board.getPlayersNumber();i++){
+                Player player = board.getPlayer(i);
+                Space playerSpace = player.getSpace();
+
+                for(FieldAction action: playerSpace.getActions()){
+                    action.doAction(this, playerSpace);
+
+                }
+            }
+        }
+    }
     /**
      * Move the player forward in the direction they are facing
      * First check if the player is on the correct board
