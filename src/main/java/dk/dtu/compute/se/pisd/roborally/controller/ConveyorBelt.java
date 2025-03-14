@@ -75,7 +75,8 @@ public class ConveyorBelt extends FieldAction {
 
         // Tjek om spilleren kan flyttes (feltet må ikke være optaget af en anden spiller)
         if (nextSpace != null && nextSpace.getPlayer() == null) {
-            player.setSpace(nextSpace); // Flyt spilleren til næste felt
+            player.setHeading(heading);
+            gameController.moveForward(player);
             return true; // Handlingen blev udført succesfuldt
         }
 

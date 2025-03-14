@@ -191,6 +191,7 @@ public class GameController {
     public boolean hasWon(Player player, Checkpoint checkpoint){
         if(checkpoint.lastCheckpoint() && this.winner==null){
             winner=player; //assign winner to the player
+            System.out.println(player + " has won!");
             return true;
         }
         return false;
@@ -322,6 +323,11 @@ public class GameController {
 
                 if (other == null || nextSpace != null && nextSpace.getPlayer() == null)
                     player.setSpace(target);
+
+                    //Activate do action on spaces, when player moves on a space.
+                    for(FieldAction actions: target.getActions()){
+                        actions.doAction(this, target);
+                    }
 
             }
         }
