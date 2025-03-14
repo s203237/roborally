@@ -61,6 +61,38 @@ public class GameController {
 
     }
 
+
+    /**
+     * Used for moving the player to a given space,
+     * and push neighbour players using recursion
+     * @param pusher The player getting moved
+     * @param space The space which the player tries to move towards
+     * @param heading The direction of the movement
+     * @throws IllegalStateException gets thrown if any walls prevent pushing neighbour players
+     */
+    public void moveToSpace(@NotNull Player pusher, @NotNull Space space, @NotNull Heading heading) throws IllegalStateException {
+
+        Player pushed = space.getPlayer();
+
+        //Push neighbor players
+        if(pushed!=null){
+            Space nextSpace = board.getNeighbour(space, heading);
+            //Check next space whether there is a wall or not.
+            if(nextSpace != null){
+                moveToSpace(pushed, nextSpace, heading);
+            }else{
+                throw new IllegalStateException("Not able to move player to space");
+            }
+        }
+
+        //Move actual player to given space
+        pusher.setSpace(space);
+        //Activate do action on the space.
+        for(FieldAction actions: space.getActions()){
+            actions.doAction(this, space);
+        }
+    }
+
     // XXX V2
 
     /**
@@ -115,8 +147,9 @@ public class GameController {
         board.setStep(0);
     }
 
-    public void gameFinishedPhase(){
-        //When someone wins
+    public void gameWonPhase(){
+        board.setPhase(Phase.PLAYER_WON);
+        makeProgramFieldsInvisible();
     }
 
     // XXX V2
@@ -174,7 +207,7 @@ public class GameController {
         return spaceLastCheckpoint;
     }
 
-    public void setLastCheckpointNumber(){
+    public void updateLastCheckpointNumber(){
         try{
             Space lastCheckpointSpace = getLastCheckpointSpace();
             for(FieldAction actions: lastCheckpointSpace.getActions()){
@@ -192,6 +225,7 @@ public class GameController {
         if(checkpoint.lastCheckpoint() && this.winner==null){
             winner=player; //assign winner to the player
             System.out.println(player + " has won!");
+            gameWonPhase();
             return true;
         }
         return false;
@@ -289,6 +323,12 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case U_TURN:
+                    this.makeUTurn(player);
+                    break;
+                case BACKWARD:
+                    this.moveBackward(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -307,15 +347,30 @@ public class GameController {
      *
      * @param player the player who is attempting to move forward
      */
-    // TODO V2
     public void moveForward(@NotNull Player player) {
         if (player.board == board) {
             Space space = player.getSpace();
             Heading heading = player.getHeading();
+
             Space target = board.getNeighbour(space, heading);
+
+            //Target may not be null - if it is null, there is a wall
+            if(target!=null){
+                try{
+                    //We move player using MoveToSpace to make sure other players get pushed aswell
+                    moveToSpace(player, target, heading);
+                }catch(IllegalStateException err){
+                    System.out.println(err.getMessage());
+                }
+            }
+
+
+            /* OLD CODE:
             if (target != null) {
+
                 Player other = target.getPlayer();
                 Space nextSpace = board.getNeighbour(target, heading);
+
 
                 if (other != null && nextSpace != null && nextSpace.getPlayer() == null) {
                     other.setSpace(nextSpace);
@@ -328,13 +383,10 @@ public class GameController {
                     for(FieldAction actions: target.getActions()){
                         actions.doAction(this, target);
                     }
-
-            }
+            }*/
         }
-
     }
 
-    // TODO V2
     /**
      * Move the player forward two cells in the direction they are facing
      * @param player the player who is attempting to move forward
@@ -344,7 +396,6 @@ public class GameController {
         moveForward(player);
     }
 
-    // TODO V2
 
     /**
      * Method is used to turn players direction to the right
@@ -355,7 +406,6 @@ public class GameController {
         player.setHeading(heading.next());
     }
 
-    // TODO V2
 
     /**
      * Method is used to turn players direction to the left
@@ -371,17 +421,25 @@ public class GameController {
      * @param player the player who is attempting to move backward
      */
     public void moveBackward(@NotNull Player player) {
-        makeUTurn(player);
-        moveForward(player);
-//        makeUTurn(player);
+        if(player.board == board){
+            Space space = player.getSpace();
+            Heading heading = player.getHeading().next().next();
+
+            Space target = board.getNeighbour(space, heading);
+            try{
+                moveToSpace(player, target, heading);
+            }catch(IllegalStateException err){
+                System.out.println(err.getMessage());
+            }
+        }
     }
     /**
      * Method is used to turn players direction to backward
      * @param player the player who is attempting to make u_turn
      */
     public void makeUTurn(@NotNull Player player) {
-        Heading heading = player.getHeading();
-        player.setHeading(heading.next().next());
+        Heading heading = player.getHeading().next().next();
+        player.setHeading(heading);
     }
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {

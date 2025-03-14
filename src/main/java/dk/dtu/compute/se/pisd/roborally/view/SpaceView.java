@@ -112,8 +112,8 @@ public class SpaceView extends StackPane implements ViewObserver {
             drawWalls();
             drawConveyorBelt();
             updateGears();
-            updatePlayer();
             updateCheckpoints();
+            updatePlayer(); // Player updates last, to make sure it stays on top of other elements.
 
         }
     }

@@ -63,24 +63,16 @@ public class ConveyorBelt extends FieldAction {
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // Tjek om der er en spiller på conveyor belt-feltet
+        if(space.getPlayer()==null){
+            return false;
+        }
+
         Player player = space.getPlayer();
-        if (player == null) {
-            return false; // Ingen spiller, så ingen handling udføres
-        }
 
-        // Find boardet og bestem den næste plads i conveyor beltets retning
-        Board board = gameController.board;
-        Space nextSpace = board.getNeighbour(space, heading);
-
-        // Tjek om spilleren kan flyttes (feltet må ikke være optaget af en anden spiller)
-        if (nextSpace != null && nextSpace.getPlayer() == null) {
-            player.setHeading(heading);
-            gameController.moveForward(player);
-            return true; // Handlingen blev udført succesfuldt
-        }
-
-        return false; // Spilleren kunne ikke flyttes (fx hvis feltet var optaget)
+        //Move player to next space
+        player.setHeading(heading);
+        gameController.moveForward(player);
+        return true; // Handlingen blev udført succesfuldt
     }
 
 
