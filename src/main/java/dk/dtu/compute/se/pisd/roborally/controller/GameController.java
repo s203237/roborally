@@ -37,6 +37,7 @@ public class GameController {
     Player winner;
 
     public GameController(@NotNull Board board) {
+
         this.board = board;
     }
 
@@ -61,6 +62,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Start the programming phase, sets the first player, and distributes command cords.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -69,11 +74,13 @@ public class GameController {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {
+                // clear previously programmed commands
                 for (int j = 0; j < Player.NO_REGISTERS; j++) {
                     CommandCardField field = player.getProgramField(j);
                     field.setCard(null);
                     field.setVisible(true);
                 }
+                // distribute new command cards to the player
                 for (int j = 0; j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
                     field.setCard(generateRandomCommandCard());
@@ -84,6 +91,11 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Generates a random command card from the available commands.
+     * @return commandCard the randomly selected command card.
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
@@ -91,6 +103,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Ends the programming phase and transitions to the activation phase.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -104,6 +120,11 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Makes the program field of the players visible at the specified index.
+     * @param register the index of the program field to be made visible.
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -115,6 +136,10 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Hides all program fields of the players.
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -172,18 +197,28 @@ public class GameController {
     }
 
     // XXX V2
+
+    /**
+     * Executes all player's programs in the activation phase
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
     // XXX V2
+    /**
+     * Executes the program step by step.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
     // XXX V2
+    /**
+     * Continues executing programs until the activation phase is completed.
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
@@ -191,6 +226,9 @@ public class GameController {
     }
 
     // XXX V2
+    /**
+     * Executes the next step in the current player's program.
+     */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -225,6 +263,12 @@ public class GameController {
     }
 
     // XXX V2
+    /**
+     * Executes the given command for the specified player.
+     *
+     * @param player The player executing the command.
+     * @param command The command to be executed.
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
@@ -268,44 +312,67 @@ public class GameController {
             Space space = player.getSpace();
             Heading heading = player.getHeading();
             Space target = board.getNeighbour(space, heading);
-            if (target == null) {
-                return;
-            }
-            if (target.getPlayer() != null) {
-                Space other = board.getNeighbour(target, heading);
-                if (other != null && other.getPlayer() == null)
-                    target.getPlayer().setSpace(other);
-                 } else {
-                     return;
+            if (target != null) {
+                Player other = target.getPlayer();
+                Space nextSpace = board.getNeighbour(target, heading);
+
+                if (other != null && nextSpace != null && nextSpace.getPlayer() == null) {
+                    other.setSpace(nextSpace);
                 }
-            player.setSpace(target);
+
+                if (other == null || nextSpace != null && nextSpace.getPlayer() == null)
+                    player.setSpace(target);
+
             }
+        }
+
     }
 
     // TODO V2
+    /**
+     * Move the player forward two cells in the direction they are facing
+     * @param player the player who is attempting to move forward
+     */
     public void fastForward(@NotNull Player player) {
         moveForward(player);
         moveForward(player);
     }
 
     // TODO V2
+
+    /**
+     * Method is used to turn players direction to the right
+     * @param player the player who is attempting to turn right
+     */
     public void turnRight(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.next());
     }
 
     // TODO V2
+
+    /**
+     * Method is used to turn players direction to the left
+     * @param player the player who is attempting to turn left
+     */
     public void turnLeft(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.prev());
     }
 
+    /**
+     * Method is used to turn players direction to backward and move forward one cell.
+     * @param player the player who is attempting to move backward
+     */
     public void moveBackward(@NotNull Player player) {
         makeUTurn(player);
         moveForward(player);
-        makeUTurn(player);
+//        makeUTurn(player);
     }
-
+    /**
+     * Method is used to turn players direction to backward
+     * @param player the player who is attempting to make u_turn
+     */
     public void makeUTurn(@NotNull Player player) {
         Heading heading = player.getHeading();
         player.setHeading(heading.next().next());
