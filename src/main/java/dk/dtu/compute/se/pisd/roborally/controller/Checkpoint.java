@@ -19,6 +19,10 @@ public class Checkpoint extends FieldAction {
         return this.lastCheckpoint;
     }
 
+    public void setLastCheckpoint(boolean lastCheck){
+        this.lastCheckpoint=lastCheck;
+    }
+
     public int getCheckPointNumber(){
         return this.checkpointNumber;
     }
@@ -28,6 +32,8 @@ public class Checkpoint extends FieldAction {
      * @param space the space this action should be executed for
      * @return
      */
+
+
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         if(space.getPlayer()==null){
@@ -41,11 +47,8 @@ public class Checkpoint extends FieldAction {
         if(player.getCheckpointProgress()+1==this.getCheckPointNumber()){
             player.setCheckpointProgress(this.getCheckPointNumber());
 
-            //TODO Check if winner
-            /*if(player.getCheckpointProgress()>=getCheckpoints()){
-                //Winner
-            }*/
-
+            //Check if player has won:
+            gameController.hasWon(player, this);
             return true;
         }
         return false;

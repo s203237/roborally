@@ -22,10 +22,6 @@ public class CheckpointExecutionTest {
         board.addPlayer(player);
         board.setCurrentPlayer(player);
 
-        //create checkpoints
-        Space space1 = board.getSpace(1,0);
-        Space space2 = board.getSpace(1,1);
-
     }
 
     @Test

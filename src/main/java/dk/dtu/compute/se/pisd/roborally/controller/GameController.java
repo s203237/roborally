@@ -34,6 +34,8 @@ public class GameController {
 
     final public Board board;
 
+    Player winner;
+
     public GameController(@NotNull Board board) {
         this.board = board;
     }
@@ -45,14 +47,6 @@ public class GameController {
      * @param space the space to which the current player should move
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space)  {
-        // TODO V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free())
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if and when the player is moved (the counter and the status line
-        //     message needs to be implemented at another place)
 
         Player current = board.getCurrentPlayer();// create a player
         if (space != null && space.getPlayer() == null) {
@@ -105,6 +99,10 @@ public class GameController {
         board.setStep(0);
     }
 
+    public void gameFinishedPhase(){
+        //When someone wins
+    }
+
     // XXX V2
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
@@ -125,6 +123,52 @@ public class GameController {
                 field.setVisible(false);
             }
         }
+    }
+
+    public Space getLastCheckpointSpace(){
+        int highestCheckpoint=0;
+        Space spaceLastCheckpoint = null;
+
+        for(var i=0; i<board.width; i++){
+            for(var j=0; j<board.height; j++){
+
+                for(FieldAction action: board.getSpace(i, j).getActions())
+                    if(action instanceof Checkpoint){
+                        if(((Checkpoint) action).getCheckPointNumber()>highestCheckpoint){
+                            highestCheckpoint=((Checkpoint) action).getCheckPointNumber();
+                            spaceLastCheckpoint=board.getSpace(i,j);
+                        }
+                    }
+            }
+        }
+
+        if(spaceLastCheckpoint==null){
+            throw new IllegalStateException("No last checkpoint");
+        }
+
+        return spaceLastCheckpoint;
+    }
+
+    public void setLastCheckpointNumber(){
+        try{
+            Space lastCheckpointSpace = getLastCheckpointSpace();
+            for(FieldAction actions: lastCheckpointSpace.getActions()){
+                if(actions instanceof Checkpoint){
+                    ((Checkpoint) actions).setLastCheckpoint(true);
+                }
+            }
+
+        }catch(IllegalStateException err){
+            System.out.println(err.getMessage());
+        }
+    }
+
+    public boolean hasWon(Player player, Checkpoint checkpoint){
+        if(checkpoint.lastCheckpoint() && this.winner==null){
+            winner=player; //assign winner to the player
+            return true;
+        }
+        return false;
     }
 
     // XXX V2
