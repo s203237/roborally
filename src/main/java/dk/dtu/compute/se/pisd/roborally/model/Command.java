@@ -41,8 +41,10 @@ public enum Command {
     FAST_FORWARD("Fast Fwd"),
 
     U_TURN("U-turn"),
+    BACKWARD("Bwd"),
     LEFT_OR_RIGHT("Left or Right",LEFT,RIGHT),
-    BACKWARD("Bwd");
+    BACK_OR_FORWARD("Bwd or Fwd",BACKWARD,FORWARD);
+
 
 
 final private List<Command> options;
