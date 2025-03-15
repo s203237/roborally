@@ -303,6 +303,14 @@ public class GameController {
             assert false;
         }
     }
+    /**
+     * Executes all field actions for players if the game has completed the programming phase.
+     * This method iterates over all players, retrieves their current space, and triggers all
+     * field actions associated with that space.
+     * @param step the current step in the game, used to determine if actions should be executed.
+     *             Actions are executed only when the step is greater than or equal to the
+     *             number of registers in a player's program.
+     */
     public void actionFileds(int step){
         if(step>=Player.NO_REGISTERS){
             for(int i =0;i<board.getPlayersNumber();i++){
