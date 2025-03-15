@@ -21,6 +21,10 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * ...
  *
@@ -37,15 +41,27 @@ public enum Command {
     FAST_FORWARD("Fast Fwd"),
 
     U_TURN("U-turn"),
-    BACKWARD("Bwd");
+    BACKWARD("Bwd"),
+    LEFT_OR_RIGHT("Left or Right",LEFT,RIGHT),
+    BACK_OR_FORWARD("Bwd or Fwd",BACKWARD,FORWARD);
 
 
 
+final private List<Command> options;
 
     final public String displayName;
 
-    Command(String displayName) {
+    Command(String displayName,Command...options) {
+
         this.displayName = displayName;
+        this.options = Collections.unmodifiableList(Arrays.asList(options));
+    }
+    public boolean isInteractive() {
+        return !options.isEmpty();
+    }
+
+    public List<Command> getOptions() {
+        return options;
     }
 
 }

@@ -245,7 +245,9 @@ public class Board extends Subject {
         /**
          * "Counter represents the total amount of steps", which is a new integer for the board class.
          */
-        return"Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
+        return"Checkpoint: "+getCurrentPlayer().getCheckpointProgress()+ "\n"
+                +"Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
+
     }
 
 }

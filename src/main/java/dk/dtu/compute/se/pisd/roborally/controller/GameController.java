@@ -62,36 +62,36 @@ public class GameController {
     }
 
 
-    /**
-     * Used for moving the player to a given space,
-     * and push neighbour players using recursion
-     * @param pusher The player getting moved
-     * @param space The space which the player tries to move towards
-     * @param heading The direction of the movement
-     * @throws IllegalStateException gets thrown if any walls prevent pushing neighbour players
-     */
-    public void moveToSpace(@NotNull Player pusher, @NotNull Space space, @NotNull Heading heading) throws IllegalStateException {
-
-        Player pushed = space.getPlayer();
-
-        //Push neighbor players
-        if(pushed!=null){
-            Space nextSpace = board.getNeighbour(space, heading);
-            //Check next space whether there is a wall or not.
-            if(nextSpace != null){
-                moveToSpace(pushed, nextSpace, heading);
-            }else{
-                throw new IllegalStateException("Not able to move player to space");
-            }
-        }
-
-        //Move actual player to given space
-        pusher.setSpace(space);
-        //Activate do action on the space.
-        for(FieldAction actions: space.getActions()){
-            actions.doAction(this, space);
-        }
-    }
+//    /**
+//     * Used for moving the player to a given space,
+//     * and push neighbour players using recursion
+//     * @param pusher The player getting moved
+//     * @param space The space which the player tries to move towards
+//     * @param heading The direction of the movement
+//     * @throws IllegalStateException gets thrown if any walls prevent pushing neighbour players
+//     */
+//    public void moveToSpace(@NotNull Player pusher, @NotNull Space space, @NotNull Heading heading) throws IllegalStateException {
+//
+//        Player pushed = space.getPlayer();
+//
+//        //Push neighbor players
+//        if(pushed!=null){
+//            Space nextSpace = board.getNeighbour(space, heading);
+//            //Check next space whether there is a wall or not.
+//            if(nextSpace != null){
+//                moveToSpace(pushed, nextSpace, heading);
+//            }else{
+//                throw new IllegalStateException("Not able to move player to space");
+//            }
+//        }
+//
+//        //Move actual player to given space
+//        pusher.setSpace(space);
+//        //Activate do action on the space.
+//        for(FieldAction actions: space.getActions()){
+//            actions.doAction(this, space);
+//        }
+//    }
 
     // XXX V2
 
@@ -273,6 +273,10 @@ public class GameController {
                 if (card != null) {
                     Command command = card.command;
 
+                    if (command.isInteractive()) {
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
+                    }
                     executeCommand(currentPlayer, command);
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
@@ -280,6 +284,8 @@ public class GameController {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
                     step++;
+                    actionFileds(step);
+
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
@@ -297,7 +303,56 @@ public class GameController {
             assert false;
         }
     }
+    public void actionFileds(int step){
+        if(step>=Player.NO_REGISTERS){
+            for(int i =0;i<board.getPlayersNumber();i++){
+                Player player = board.getPlayer(i);
+                Space playerSpace = player.getSpace();
 
+                for(FieldAction action: playerSpace.getActions()){
+                    action.doAction(this, playerSpace);
+
+                }
+            }
+        }
+    }
+    /**
+     * Executes a command for the current player and proceeds with the game flow.
+     * This method checks whether the game is in the correct phase and if the given command is valid.
+     * It then executes the command for the current player and transitions the game to the next step
+     * or phase accordingly.
+     *
+     * @param option The command to be executed for the current player. Must not be null.
+     */
+public void executeCommandOptionAndContinue(@NotNull Command option){
+    // Retrieve the current player
+        Player currentPlayer = board.getCurrentPlayer();
+        //ensure the current player is valid, the game is in PLAYER_INTERACTION, and option is not null
+        if(currentPlayer!=null && board.getPhase()==Phase.PLAYER_INTERACTION&& option!=null){
+            board.setPhase(Phase.ACTIVATION);
+            executeCommand(currentPlayer,option);
+            int nextPlayerNumber = board.getPlayerNumber(currentPlayer)+1;
+            if(nextPlayerNumber< board.getPlayersNumber()){
+                // set the next player as the current player
+                board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+            }else{
+                //if all players have taken their turn, move to the next step
+                int step =board.getStep()+1;
+                if(step< Player.NO_REGISTERS){
+                    // make program fields visible for the new step
+                    // and reset the current player to the first player
+                    makeProgramFieldsVisible(step);
+                    board.setStep(step);
+                    board.setCurrentPlayer(board.getPlayer(0));
+                }else {
+                    // if all steps are completed, transition to the programming phase
+                    startProgrammingPhase();
+                }
+            }
+
+        }
+        continuePrograms();
+}
     // XXX V2
     /**
      * Executes the given command for the specified player.
@@ -336,6 +391,7 @@ public class GameController {
         }
     }
 
+
     /**
      * Move the player forward in the direction they are facing
      * First check if the player is on the correct board
@@ -355,6 +411,7 @@ public class GameController {
 
             Space target = board.getNeighbour(space, heading);
 
+
             //Target may not be null - if it is null, there is a wall
             if(target!=null){
                 try{
@@ -366,27 +423,39 @@ public class GameController {
             }
 
 
-            /* OLD CODE:
-            if (target != null) {
-
-                Player other = target.getPlayer();
-                Space nextSpace = board.getNeighbour(target, heading);
-
-
-                if (other != null && nextSpace != null && nextSpace.getPlayer() == null) {
-                    other.setSpace(nextSpace);
-                }
-
-                if (other == null || nextSpace != null && nextSpace.getPlayer() == null)
-                    player.setSpace(target);
-
-                    //Activate do action on spaces, when player moves on a space.
-                    for(FieldAction actions: target.getActions()){
-                        actions.doAction(this, target);
-                    }
-            }*/
         }
     }
+    /**
+     * This method is used to check the new space is available for the current player moves.
+     * to check if there is any player in the new space, if yes, move to make space available for current player.
+     * @param heading  the heading of the player
+     * @param player the current player
+     * @param target the target space where the current player will move to
+     * @return  true if the player successfully moves to the target space, otherwise false.
+     */
+    private boolean moveToSpace(Player player, Space target, Heading heading) {
+        if (target == null) {
+            return false;
+        }
+        Player other = target.getPlayer();
+        if(other==null){
+            player.setSpace(target);
+            return true;
+        }else if(other!=null){
+            Space nextSpace = board.getNeighbour(target,heading);
+            boolean result = moveToSpace(target.getPlayer(),nextSpace,heading);
+            if(result!=false){
+                player.setSpace(target);
+                return true;
+            }else{
+                return false;}
+        }else{
+                return true;
+
+        }
+    }
+
+    // TODO V2
 
     /**
      * Move the player forward two cells in the direction they are facing
@@ -396,7 +465,6 @@ public class GameController {
         moveForward(player);
         moveForward(player);
     }
-
 
     /**
      * Method is used to turn players direction to the right
@@ -422,17 +490,11 @@ public class GameController {
      * @param player the player who is attempting to move backward
      */
     public void moveBackward(@NotNull Player player) {
-        if(player.board == board){
-            Space space = player.getSpace();
-            Heading heading = player.getHeading().next().next();
 
-            Space target = board.getNeighbour(space, heading);
-            try{
-                moveToSpace(player, target, heading);
-            }catch(IllegalStateException err){
-                System.out.println(err.getMessage());
-            }
-        }
+        makeUTurn(player);
+        moveForward(player);
+        //makeUTurn(player);
+
     }
     /**
      * Method is used to turn players direction to backward

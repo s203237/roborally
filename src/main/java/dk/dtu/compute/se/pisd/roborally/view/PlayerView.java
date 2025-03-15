@@ -23,9 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -209,15 +207,28 @@ public class PlayerView extends Tab implements ViewObserver {
                     //      an interactive command card, and the buttons should represent
                     //      the player's choices of the interactive command card. The
                     //      following is just a mockup showing two options
-                    Button optionButton = new Button("Option1");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
+//                    Button optionButton = new Button("Option1");
+//                    optionButton.setOnAction( e -> gameController.notImplemented());
+//                    optionButton.setDisable(false);
+//                    playerInteractionPanel.getChildren().add(optionButton);
+//
+//                    optionButton = new Button("Option 2");
+//                    optionButton.setOnAction( e -> gameController.notImplemented());
+//                    optionButton.setDisable(false);
+//                    playerInteractionPanel.getChildren().add(optionButton);
+                    CommandCardField field = player.getProgramField(player.board.getStep());
+                    if (field!=null){
+                        CommandCard card = field.getCard();
+                        if(card!=null){
+                            for(Command option: card.command.getOptions()){
+                                Button optionButton = new Button(option.displayName);
+                                optionButton.setOnAction(e->gameController.executeCommandOptionAndContinue(option));
+                                optionButton.setDisable(false);
+                                playerInteractionPanel.getChildren().add(optionButton);
+                            }
+                        }
+                    }
 
-                    optionButton = new Button("Option 2");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
                 }
             }
         }
