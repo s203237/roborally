@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -68,8 +69,7 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
-                spaces[x][y] = space;
+                spaces[x][y] = new Space(this, x, y);
             }
         }
         this.stepMode = false;
@@ -177,8 +177,9 @@ public class Board extends Subject {
      * Function for setting the steps counter for each move the player takes.
      * @param value the new value of the counter
      */
-    public void setCounterSteps(@NotNull int value){
+    public void setCounter(@NotNull int value){
             counter=value;
+            notifyChange();
     }
 
     /**
@@ -186,7 +187,7 @@ public class Board extends Subject {
      * @return the total player moves
      */
 
-    public int getCounterSteps(){
+    public int getCounter(){
         return counter;
     }
 
@@ -220,20 +221,31 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-
-        return getSpace(x, y);
+        Space neighbour = getSpace(x,y);
+        //check if there is an adjacent space
+        if(neighbour==null){
+            return null;
+        }
+        //check if there is a wall blocking the player at the current space.
+        if (space.getWalls().contains(heading)){
+            return null;
+        }
+        // check if the adjacent space has a wall facing the opposite players direction.
+        if(neighbour.getWalls().contains(heading.next().next())){
+            return null;
+        }
+        return neighbour;
     }
 
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
         // status of the game
-
-        // TODO V2: changed the status so that it shows the phase, the current player, and the current register
         /**
-         * "Counter represents the total amount of steps", which is a new integer for the board class.
+         * "Counter represents the total amount of steps".
          */
-        return "Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
+        return "Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounter();
+
     }
 
 }

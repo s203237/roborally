@@ -6,11 +6,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class Gear extends FieldAction {
     public enum GearType{LEFT, RIGHT}
-    private final GearType direction;
+    private GearType direction;
     public Gear(GearType direction){
         this.direction =direction;
     }
-
+/**
+ *  Implementation of the action of a gear.
+ * @param gameController the gameController of the respective game
+ * @param space the space this action should be executed for
+ */
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space){
         Heading newHeading ;
         if(direction == GearType.LEFT) {
@@ -25,9 +29,7 @@ public class Gear extends FieldAction {
     public boolean isRight() {
         return this.direction == GearType.RIGHT;
     }
-    public void setDirection (GearType direction){
-        this.direction = direction;
-    }
+
 
     @Override
     public String toString(){

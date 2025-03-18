@@ -23,9 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -62,12 +60,13 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private VBox playerInteractionPanel;
 
+    private  Label label;
     private GameController gameController;
 
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
-
+    label = new Label();
         top = new VBox();
         this.setContent(top);
 
@@ -96,13 +95,13 @@ public class PlayerView extends Tab implements ViewObserver {
         //          in the game controller
 
         finishButton = new Button("Finish Programming");
-        finishButton.setOnAction( e -> gameController.notImplemented());
+        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
 
         executeButton = new Button("Execute Program");
-        executeButton.setOnAction( e-> gameController.notImplemented());
+        executeButton.setOnAction( e-> gameController.executePrograms());
 
         stepButton = new Button("Execute Current Register");
-        stepButton.setOnAction( e-> gameController.notImplemented());
+        stepButton.setOnAction( e-> gameController.executeStep());
 
         buttonPanel = new VBox(finishButton, executeButton, stepButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
@@ -129,6 +128,7 @@ public class PlayerView extends Tab implements ViewObserver {
         top.getChildren().add(programPane);
         top.getChildren().add(cardsLabel);
         top.getChildren().add(cardsPane);
+        top.getChildren().add(label);
 
         // TODO A3 add a label for the status of this player could be added here
         //      ege showing the number of achieved chekpoints (etc).
@@ -142,6 +142,7 @@ public class PlayerView extends Tab implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
+            label.setText("Check point:" +player.getCheckpointProgress());
             // TODO A3 update the status label for this player
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];
@@ -209,15 +210,28 @@ public class PlayerView extends Tab implements ViewObserver {
                     //      an interactive command card, and the buttons should represent
                     //      the player's choices of the interactive command card. The
                     //      following is just a mockup showing two options
-                    Button optionButton = new Button("Option1");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
+//                    Button optionButton = new Button("Option1");
+//                    optionButton.setOnAction( e -> gameController.notImplemented());
+//                    optionButton.setDisable(false);
+//                    playerInteractionPanel.getChildren().add(optionButton);
+//
+//                    optionButton = new Button("Option 2");
+//                    optionButton.setOnAction( e -> gameController.notImplemented());
+//                    optionButton.setDisable(false);
+//                    playerInteractionPanel.getChildren().add(optionButton);
+                    CommandCardField field = player.getProgramField(player.board.getStep());
+                    if (field!=null){
+                        CommandCard card = field.getCard();
+                        if(card!=null){
+                            for(Command option: card.command.getOptions()){
+                                Button optionButton = new Button(option.displayName);
+                                optionButton.setOnAction(e->gameController.executeCommandOptionAndContinue(option));
+                                optionButton.setDisable(false);
+                                playerInteractionPanel.getChildren().add(optionButton);
+                            }
+                        }
+                    }
 
-                    optionButton = new Button("Option 2");
-                    optionButton.setOnAction( e -> gameController.notImplemented());
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
                 }
             }
         }
