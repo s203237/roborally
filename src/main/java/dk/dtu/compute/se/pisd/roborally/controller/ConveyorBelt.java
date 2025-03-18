@@ -22,8 +22,11 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+
 
 /**
  * This class represents a conveyor belt on a space.
@@ -36,13 +39,23 @@ public class ConveyorBelt extends FieldAction {
 
     private Heading heading;
 
+   public ConveyorBelt(Heading heading) {
+        super();
+        this.heading =heading;
+    }
+    public ConveyorBelt() {
+        super();
+        this.heading = Heading.NORTH; // Default heading
+    }
 
     public Heading getHeading() {
         return heading;
     }
 
     public void setHeading(Heading heading) {
-        this.heading = heading;
+        if (heading != this.heading) {
+            this.heading = heading;
+        }
     }
 
     /**
@@ -50,10 +63,25 @@ public class ConveyorBelt extends FieldAction {
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO A3: needs to be implemented
-        // ...
+        // Tjek om der er en spiller på conveyor belt-feltet
+        Player player = space.getPlayer();
+        if (player == null) {
+            return false; // Ingen spiller, så ingen handling udføres
+        }
 
-        return false;
+        // Find boardet og bestem den næste plads i conveyor beltets retning
+        Board board = gameController.board;
+        Space nextSpace = board.getNeighbour(space, heading);
+
+        // Tjek om spilleren kan flyttes (feltet må ikke være optaget af en anden spiller)
+        if (nextSpace != null && nextSpace.getPlayer() == null) {
+            player.setSpace(nextSpace); // Flyt spilleren til næste felt
+            return true; // Handlingen blev udført succesfuldt
+        }
+
+        return false; // Spilleren kunne ikke flyttes (fx hvis feltet var optaget)
     }
+
+
 
 }

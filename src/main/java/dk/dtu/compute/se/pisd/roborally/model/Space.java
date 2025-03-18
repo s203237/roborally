@@ -22,7 +22,9 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.controller.Gear;
 
 import java.util.ArrayList;
@@ -49,7 +51,6 @@ public class Space extends Subject {
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();
-    private Gear gear;
 
 
     public Space(Board board, int x, int y) {
@@ -57,8 +58,6 @@ public class Space extends Subject {
         this.x = x;
         this.y = y;
         player = null;
-        gear =null;
-
     }
 
     public Player getPlayer() {
@@ -82,7 +81,18 @@ public class Space extends Subject {
     }
 
     /**
-     * Returns the walls (actually their direction) on this space.
+     * Adds the given checkpoint to the board and the board's checkpoint list
+     * @param checkpointNo
+     * @return the new checkpoint
+     */
+    public Checkpoint addCheckpoint(int checkpointNo, boolean lastCheck){
+        Checkpoint newCheckpoint = new Checkpoint(checkpointNo, lastCheck);
+        actions.add(newCheckpoint); // add to actions field list.
+        return newCheckpoint;
+    }
+
+    /**
+     * Returns the walls3 (actually their direction) on this space.
      * Note that clients may change this list; this should, however,
      * be done only during the setup of the game (not while the game
      * is running).
@@ -94,9 +104,6 @@ public class Space extends Subject {
         return walls;
     }
 
-    public Gear getGear(){
-        return gear;
-    }
 
     /**
      * Returns the list of field actions on this space.
@@ -124,11 +131,13 @@ public class Space extends Subject {
      * @param direction of gear ( left or right)
      */
     public void addGear(Gear.GearType direction){
-        if(this.gear == null){
-            this.gear = new Gear(direction);
-            this.actions.add(this.gear);
-            notifyChange();
-        }
+
+        this.actions.add(new Gear(direction));
+
+        Gear newGear = new Gear(direction);
+        this.actions.add(newGear);
+
+        notifyChange();
     }
     public void addWall(Heading heading) {
         if (!walls.contains(heading)) {

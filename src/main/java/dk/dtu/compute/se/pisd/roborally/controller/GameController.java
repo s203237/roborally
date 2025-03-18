@@ -28,13 +28,13 @@ import org.jetbrains.annotations.NotNull;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class GameController {
 
     final public Board board;
 
     public GameController(@NotNull Board board) {
+
         this.board = board;
     }
 
@@ -44,7 +44,7 @@ public class GameController {
      *
      * @param space the space to which the current player should move
      */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
+    public void moveCurrentPlayerToSpace(@NotNull Space space) {
         // TODO V1: method should be implemented by the students:
         //   - the current player should be moved to the given space
         //     (if it is free())
@@ -55,13 +55,13 @@ public class GameController {
         //     message needs to be implemented at another place)
 
         Player current = board.getCurrentPlayer();// create a player
-        if(space!= null && space.getPlayer()==null){
+        if (space != null && space.getPlayer() == null) {
             current.setSpace(space);
             int n = board.getPlayerNumber(current);
-            Player next = board.getPlayer((n+1)%board.getPlayersNumber());
+            Player next = board.getPlayer((n + 1) % board.getPlayersNumber());
             board.setCurrentPlayer(next);
             //Increment steps
-            board.setCounterSteps(board.getCounterSteps()+1);
+            board.setCounterSteps(board.getCounterSteps() + 1);
         }
 
     }
@@ -200,30 +200,77 @@ public class GameController {
                 case FAST_FORWARD:
                     this.fastForward(player);
                     break;
+                case BACKWARD:
+                    this.moveBackward(player);
+                    break;
+                case U_TURN:
+                    this.makeUTurn(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
         }
     }
 
+    /**
+     * Move the player forward in the direction they are facing
+     * First check if the player is on the correct board
+     * then determine the target space based on the player's current heading.
+     * if there is a wall blocking movement, the player remains in place.
+     * if the target space contains another player, the method attempts to push
+     * that player to the next available space in the same direction.
+     * if the target space is available, the player moves to the new position.
+     * if the adjacent space is occupied and can not be pushed, the player remains in place.
+     *
+     * @param player the player who is attempting to move forward
+     */
     // TODO V2
     public void moveForward(@NotNull Player player) {
-
+        if (player.board == board) {
+            Space space = player.getSpace();
+            Heading heading = player.getHeading();
+            Space target = board.getNeighbour(space, heading);
+            if (target == null) {
+                return;
+            }
+            if (target.getPlayer() != null) {
+                Space other = board.getNeighbour(target, heading);
+                if (other != null && other.getPlayer() == null)
+                    target.getPlayer().setSpace(other);
+                 } else {
+                     return;
+                }
+            player.setSpace(target);
+            }
     }
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
-
+        moveForward(player);
+        moveForward(player);
     }
 
     // TODO V2
     public void turnRight(@NotNull Player player) {
-
+        Heading heading = player.getHeading();
+        player.setHeading(heading.next());
     }
 
     // TODO V2
     public void turnLeft(@NotNull Player player) {
+        Heading heading = player.getHeading();
+        player.setHeading(heading.prev());
+    }
 
+    public void moveBackward(@NotNull Player player) {
+        makeUTurn(player);
+        moveForward(player);
+        makeUTurn(player);
+    }
+
+    public void makeUTurn(@NotNull Player player) {
+        Heading heading = player.getHeading();
+        player.setHeading(heading.next().next());
     }
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
