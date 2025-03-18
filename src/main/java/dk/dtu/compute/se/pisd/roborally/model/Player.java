@@ -146,9 +146,6 @@ public class Player extends Subject {
      */
     public void setCheckpointProgress(int value){
         this.CheckpointProgress = value;
-
-        //For debugging purposes
-        System.out.println(this.name +"'s updated checkpoint prog: " + this.getCheckpointProgress());
     }
 
     public CommandCardField getProgramField(int i) {
