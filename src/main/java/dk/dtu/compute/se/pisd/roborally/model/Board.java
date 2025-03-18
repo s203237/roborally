@@ -241,10 +241,8 @@ public class Board extends Subject {
         // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
         // status of the game
-
-        // TODO V2: changed the status so that it shows the phase, the current player, and the current register
         /**
-         * "Counter represents the total amount of steps", which is a new integer for the board class.
+         * "Counter represents the total amount of steps".
          */
         return "Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounter();
 

@@ -27,13 +27,12 @@ public class Checkpoint extends FieldAction {
         return this.checkpointNumber;
     }
 
-    /**
+    /** Our checkpoint checks for whether this checkpoint is the player's
+     * next checkpoint, using the player's checkpointProgress attribute.
      * @param gameController the gameController of the respective game
      * @param space the space this action should be executed for
      * @return
      */
-
-
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         if(space.getPlayer()==null){

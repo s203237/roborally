@@ -150,9 +150,12 @@ public class GameController {
         board.setStep(0);
     }
 
+    /** Creates a pop-up window, showing the player has won,
+     * and changes the game phase.
+     *
+     */
     public void gameWonPhase(){
         board.setPhase(Phase.PLAYER_WON);
-        makeProgramFieldsInvisible();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("CONGRATULATION!");
         alert.setHeaderText(null);
@@ -191,6 +194,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Iterates through all the spaces on the board, and compares
+     * each checkpoint's number with each other, and returns the space
+     * which contains the highest (last) checkpoint.
+     * @return
+     */
     public Space getLastCheckpointSpace(){
         int highestCheckpoint=0;
         Space spaceLastCheckpoint = null;
@@ -215,6 +224,10 @@ public class GameController {
         return spaceLastCheckpoint;
     }
 
+    /**
+     * Finds the last checkpoint's space (rated through highest checkpoint number)
+     * with getLastCheckpoint number, and assigns this space's checkpoint as lastCheckpoint.
+     */
     public void updateLastCheckpointNumber(){
         try{
             Space lastCheckpointSpace = getLastCheckpointSpace();
@@ -229,6 +242,14 @@ public class GameController {
         }
     }
 
+    /**
+     * We use this method on checkpoint collisions with players to check for every
+     * checkpoint if the player has won (collides with last checkpoint), and changes
+     * the game state to PLAYER_WON
+     * @param player
+     * @param checkpoint
+     * @return true or false if player has won
+     */
     public boolean hasWon(Player player, Checkpoint checkpoint){
         if(checkpoint.lastCheckpoint() && this.winner==null){
             winner=player; //assign winner to the player
