@@ -155,12 +155,14 @@ public class GameController {
      *
      */
     public void gameWonPhase(){
-        board.setPhase(Phase.PLAYER_WON);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("CONGRATULATION!");
-        alert.setHeaderText(null);
-        alert.setContentText("Congratulation!! "+board.getCurrentPlayer().getName()+" is won!");
-        alert.showAndWait();
+        if(winner!=null){
+            board.setPhase(Phase.PLAYER_WON);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("CONGRATULATION!");
+            alert.setHeaderText(null);
+            alert.setContentText("Congratulation!! "+winner.getName()+" is won!");
+            alert.showAndWait();
+        }
     }
 
     // XXX V2
