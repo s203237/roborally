@@ -177,8 +177,9 @@ public class Board extends Subject {
      * Function for setting the steps counter for each move the player takes.
      * @param value the new value of the counter
      */
-    public void setCounterSteps(@NotNull int value){
+    public void setCounter(@NotNull int value){
             counter=value;
+            notifyChange();
     }
 
     /**
@@ -186,7 +187,7 @@ public class Board extends Subject {
      * @return the total player moves
      */
 
-    public int getCounterSteps(){
+    public int getCounter(){
         return counter;
     }
 
@@ -246,7 +247,7 @@ public class Board extends Subject {
          * "Counter represents the total amount of steps", which is a new integer for the board class.
          */
         return"Checkpoint: "+getCurrentPlayer().getCheckpointProgress()+ "\n"
-                +"Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounterSteps();
+                +"Phase ="+getPhase().name()+" , Player = " + getCurrentPlayer().getName() + ", Total steps = " + getCounter();
 
     }
 

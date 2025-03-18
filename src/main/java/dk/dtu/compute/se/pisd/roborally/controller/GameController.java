@@ -56,42 +56,44 @@ public class GameController {
             Player next = board.getPlayer((n + 1) % board.getPlayersNumber());
             board.setCurrentPlayer(next);
             //Increment steps
-            board.setCounterSteps(board.getCounterSteps() + 1);
+            board.setCounter(board.getCounter() + 1);
         }
 
     }
 
 
-//    /**
-//     * Used for moving the player to a given space,
-//     * and push neighbour players using recursion
-//     * @param pusher The player getting moved
-//     * @param space The space which the player tries to move towards
-//     * @param heading The direction of the movement
-//     * @throws IllegalStateException gets thrown if any walls prevent pushing neighbour players
-//     */
-//    public void moveToSpace(@NotNull Player pusher, @NotNull Space space, @NotNull Heading heading) throws IllegalStateException {
-//
-//        Player pushed = space.getPlayer();
-//
-//        //Push neighbor players
-//        if(pushed!=null){
-//            Space nextSpace = board.getNeighbour(space, heading);
-//            //Check next space whether there is a wall or not.
-//            if(nextSpace != null){
-//                moveToSpace(pushed, nextSpace, heading);
-//            }else{
-//                throw new IllegalStateException("Not able to move player to space");
-//            }
-//        }
-//
-//        //Move actual player to given space
-//        pusher.setSpace(space);
-//        //Activate do action on the space.
-//        for(FieldAction actions: space.getActions()){
-//            actions.doAction(this, space);
-//        }
-//    }
+    /**
+     * Used for moving the player to a given space,
+     * and push neighbour players using recursion
+     * @param pusher The player getting moved
+     * @param space The space which the player tries to move towards
+     * @param heading The direction of the movement
+     * @throws IllegalStateException gets thrown if any walls prevent pushing neighbour players
+     */
+    public void moveToSpace(@NotNull Player pusher, @NotNull Space space, @NotNull Heading heading) throws IllegalStateException {
+
+        Player pushed = space.getPlayer();
+
+        //Push neighbor players
+        if(pushed!=null){
+            Space nextSpace = board.getNeighbour(space, heading);
+            //Check next space whether there is a wall or not.
+            if(nextSpace != null){
+                moveToSpace(pushed, nextSpace, heading);
+            }else{
+                throw new IllegalStateException("Not able to move player to space");
+            }
+
+        }
+
+        //Move actual player to given space
+        pusher.setSpace(space);
+        //Activate do action on the space.
+        for(FieldAction actions: space.getActions()){
+            actions.doAction(this, space);
+        }
+        board.setCounter(board.getCounter()+1);
+    }
 
     // XXX V2
 
@@ -224,7 +226,6 @@ public class GameController {
     public boolean hasWon(Player player, Checkpoint checkpoint){
         if(checkpoint.lastCheckpoint() && this.winner==null){
             winner=player; //assign winner to the player
-            System.out.println(player + " has won!");
             gameWonPhase();
             return true;
         }
@@ -433,35 +434,35 @@ public void executeCommandOptionAndContinue(@NotNull Command option){
 
         }
     }
-    /**
-     * This method is used to check the new space is available for the current player moves.
-     * to check if there is any player in the new space, if yes, move to make space available for current player.
-     * @param heading  the heading of the player
-     * @param player the current player
-     * @param target the target space where the current player will move to
-     * @return  true if the player successfully moves to the target space, otherwise false.
-     */
-    private boolean moveToSpace(Player player, Space target, Heading heading) {
-        if (target == null) {
-            return false;
-        }
-        Player other = target.getPlayer();
-        if(other==null){
-            player.setSpace(target);
-            return true;
-        }else if(other!=null){
-            Space nextSpace = board.getNeighbour(target,heading);
-            boolean result = moveToSpace(target.getPlayer(),nextSpace,heading);
-            if(result!=false){
-                player.setSpace(target);
-                return true;
-            }else{
-                return false;}
-        }else{
-                return true;
-
-        }
-    }
+//    /**
+//     * This method is used to check the new space is available for the current player moves.
+//     * to check if there is any player in the new space, if yes, move to make space available for current player.
+//     * @param heading  the heading of the player
+//     * @param player the current player
+//     * @param target the target space where the current player will move to
+//     * @return  true if the player successfully moves to the target space, otherwise false.
+//     */
+//    private boolean moveToSpace(Player player, Space target, Heading heading) {
+//        if (target == null) {
+//            return false;
+//        }
+//        Player other = target.getPlayer();
+//        if(other==null){
+//            player.setSpace(target);
+//            return true;
+//        }else if(other!=null){
+//            Space nextSpace = board.getNeighbour(target,heading);
+//            boolean result = moveToSpace(target.getPlayer(),nextSpace,heading);
+//            if(result!=false){
+//                player.setSpace(target);
+//                return true;
+//            }else{
+//                return false;}
+//        }else{
+//                return true;
+//
+//        }
+//    }
 
     // TODO V2
 
