@@ -10,7 +10,11 @@ public class Gear extends FieldAction {
     public Gear(GearType direction){
         this.direction =direction;
     }
-
+/**
+ *  Implementation of the action of a gear.
+ * @param gameController the gameController of the respective game
+ * @param space the space this action should be executed for
+ */
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space){
         Heading newHeading ;
         if(direction == GearType.LEFT) {
