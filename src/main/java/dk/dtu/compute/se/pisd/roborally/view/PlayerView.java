@@ -60,12 +60,13 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private VBox playerInteractionPanel;
 
+    private  Label label;
     private GameController gameController;
 
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
-
+    label = new Label();
         top = new VBox();
         this.setContent(top);
 
@@ -127,6 +128,7 @@ public class PlayerView extends Tab implements ViewObserver {
         top.getChildren().add(programPane);
         top.getChildren().add(cardsLabel);
         top.getChildren().add(cardsPane);
+        top.getChildren().add(label);
 
         // TODO A3 add a label for the status of this player could be added here
         //      ege showing the number of achieved chekpoints (etc).
@@ -140,6 +142,7 @@ public class PlayerView extends Tab implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
+            label.setText("Check point:" +player.getCheckpointProgress());
             // TODO A3 update the status label for this player
             for (int i = 0; i < Player.NO_REGISTERS; i++) {
                 CardFieldView cardFieldView = programCardViews[i];

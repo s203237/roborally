@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import javafx.scene.control.Alert;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -152,6 +153,11 @@ public class GameController {
     public void gameWonPhase(){
         board.setPhase(Phase.PLAYER_WON);
         makeProgramFieldsInvisible();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("CONGRATULATION!");
+        alert.setHeaderText(null);
+        alert.setContentText("Congratulation!! "+board.getCurrentPlayer().getName()+" is won!");
+        alert.showAndWait();
     }
 
     // XXX V2
